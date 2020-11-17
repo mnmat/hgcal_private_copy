@@ -1,15 +1,13 @@
 import os
 
-#SAMPLE_LABEL = ["\"Single photons\"", "\"Single pions\"", "\"Single electrons\""]
-#SAMPLE_FILE = ["singlephoton", "singlepi", "singleel"]
-#SAMPLE_LABEL = ["\"Single electrons\""]
-#SAMPLE_FILE = ["singleel"]
-SAMPLE_LABEL = ["\"Single kaons\""]
-SAMPLE_FILE = ["singleKaonL"]
+SAMPLE_LABEL = ["\"Single photons, 1 Sim Clu\"", "\"Single pions, 1 Sim Clu\"", "\"Single electrons, 1 Sim Clu\"", "\"Single kaons, 1 Sim Clu\""]
+SAMPLE_FILE = ["singlephoton", "singlepi", "singleel", "singleKaonL"]
+#SAMPLE_LABEL = ["\"Single pions, 1 Sim Clu\""]
+#SAMPLE_FILE = ["singlepi"]
 
-RELEASE_TAG = ["after_60c3c21"]#, "before"]
+RELEASE_TAG = ["92c59aa_model197566b"]#, "before"]
 
-ITERS = ["\"Global:ticlMultiClustersFromTrackstersMerge\" \"TrkEM:ticlMultiClustersFromTrackstersTrkEM\" \"EM:ticlMultiClustersFromTrackstersEM\" \"TrkHAD:ticlMultiClustersFromTrackstersTrk\" \"HAD:ticlMultiClustersFromTrackstersHAD\"",
+ITERS = ["\"Dummy:ticlMultiClustersFromTrackstersDummy\" \"Merged:ticlMultiClustersFromTrackstersMerge\" \"TrkEM:ticlMultiClustersFromTrackstersTrkEM\" \"EM:ticlMultiClustersFromTrackstersEM\" \"TrkHAD:ticlMultiClustersFromTrackstersTrk\" \"HAD:ticlMultiClustersFromTrackstersHAD\"",
          "\"Global:ticlMultiClustersFromTrackstersMerge\" \"Trk:ticlMultiClustersFromTrackstersTrk\" \"EM:ticlMultiClustersFromTrackstersEM\" \"HAD:ticlMultiClustersFromTrackstersHAD\""]
 
 FEATURES = "\"E = 10 GeV:91:22\" \"E = 50 GeV:94:21\" \"E = 100 GeV:64:21\" \"E = 200 GeV:57:21\" \"E = 300 GeV:52:21\""
