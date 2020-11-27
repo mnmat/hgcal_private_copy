@@ -40,7 +40,7 @@ for feature in args.features:
   MARKERS.append(int(feat[2]))
 
 SAMPLE = args.sample
-HISTOPREFIX = 'DQMData/Run 1/HGCAL/Run summary/HGCalValidator/'
+HISTOPREFIX = 'DQMData/Run 1/HGCAL/Run summary/HGCalValidator_1SimCl/'
 HISTONAMES = ["globalEfficiencies"]
 
 LABEL_ITERS = []
