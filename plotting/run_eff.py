@@ -1,6 +1,7 @@
 import os
+from collections import OrderedDict
 
-SAMPLE_LABEL = ["\"Single photons, 1 Sim Clu\"", "\"Single pions, 1 Sim Clu\"", "\"Single electrons, 1 Sim Clu\"", "\"Single kaons, 1 Sim Clu\""]
+SAMPLE_LABEL = ["\"Single photons, 1 simCluster\"", "\"Single pions, 1 simCluster\"", "\"Single electrons, 1 simCluster\"", "\"Single kaons, 1 simCluster\""]
 SAMPLES = ["singlephoton", "singlepi", "singleel", "singleKaonL"]
 #SAMPLE_LABEL = ["\"Single pions, 1 Sim Clu\""]
 #SAMPLES = ["singlepi"]
@@ -8,18 +9,21 @@ GENPRODUCER = {'singlephoton':"closeBy", 'singlepi':"flatEGun", 'singleel':"flat
 
 RELEASE_TAG = ["vanilla"]
 
-ITERS = ["\"Dummy:ticlMultiClustersFromTrackstersDummy\" \"Merged:ticlMultiClustersFromTrackstersMerge\" \"TrkEM:ticlMultiClustersFromTrackstersTrkEM\" \"EM:ticlMultiClustersFromTrackstersEM\" \"TrkHAD:ticlMultiClustersFromTrackstersTrk\" \"HAD:ticlMultiClustersFromTrackstersHAD\""]
+iterLabel = OrderedDict([#("Dummy","Dummy"), 
+			 ("Merge","Global"), ("TrkEM","TrkEM"), ("EM","EM"), ("Trk","TrkHAD"), ("HAD","HAD")])
+ITERS = [' '.join("\""+iterLabel[ticlIter]+":ticlMultiClustersFromTracksters"+ticlIter+"\"" for ticlIter in iterLabel)]
 
-FEATURES = "\"E = 10 GeV:91:22\" \"E = 50 GeV:94:21\" \"E = 100 GeV:64:21\" \"E = 200 GeV:57:21\" \"E = 300 GeV:52:21\""
 PATHFILESIN = "/data2/user/ebrondol/HGCal/HGCDoublet_validation/CMSSW_11_2_0_pre10/TICLv3_11_2_X_pre10/production/"
+#PATHFILESIN = "/data2/user/lecriste/HGCal/samples/TICLDebugger/EMTrackSeeded/92c59aa-pre10_model138329a/"
 
+energies_features = OrderedDict([#("10",91), 
+("50",94), ("100",64), ("200",57), ("300",52)])
+FEATURES = ' '.join("\"E = "+key+" GeV:"+str(energies_features[key])+":21\"" for key in energies_features)
 for tag,i_iter in zip(RELEASE_TAG,ITERS) :
 
   for i_label,i_sample in zip(SAMPLE_LABEL,SAMPLES):
     inputFolder = "{}/{}_{}_hgcalCenter/step4/".format(PATHFILESIN, i_sample, GENPRODUCER[i_sample])
-    FILENAMES = ["DQM_V0001_R000000001__step4_"+i_sample+"__e10GeV__nopu.root", "DQM_V0001_R000000001__step4_"+i_sample+"__e50GeV__nopu.root", 
-                 "DQM_V0001_R000000001__step4_"+i_sample+"__e100GeV__nopu.root", 
-                 "DQM_V0001_R000000001__step4_"+i_sample+"__e200GeV__nopu.root", "DQM_V0001_R000000001__step4_"+i_sample+"__e300GeV__nopu.root"]
+    FILENAMES = ["DQM_V0001_R000000001__step4_"+i_sample+"__e"+key+"GeV__nopu.root" for key in energies_features]
 
     listFilein = ""
     for filein in FILENAMES:
