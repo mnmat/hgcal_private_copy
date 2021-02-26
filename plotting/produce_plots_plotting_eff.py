@@ -40,7 +40,10 @@ for feature in args.features:
   MARKERS.append(int(feat[2]))
 
 SAMPLE = args.sample
-HISTOPREFIX = 'DQMData/Run 1/HGCAL/Run summary/HGCalValidator_1SimCl/'
+HISTOPREFIX = 'DQMData/Run 1/HGCAL/Run summary/HGCalValidator'
+if 'non' in LABELS[0]:
+  HISTOPREFIX += '_1SimCl'
+
 HISTONAMES = ["globalEfficiencies"]
 
 LABEL_ITERS = []
@@ -54,28 +57,74 @@ for i in args.iters:
 GRAPHS = []
 x1 = []
 y1 = []
+
+# From https://twiki.cern.ch/twiki/pub/CMS/Internal/FigGuidelines/myMacro.py.txt
+import CMS_lumi, tdrstyle
+import array
+
+#set the tdr style
+#tdrstyle.setTDRStyle() # this changes too many things
+
+#change the CMS_lumi variables (see CMS_lumi.py)
+CMS_lumi.lumi_7TeV = "4.8 fb^{-1}"
+CMS_lumi.lumi_8TeV = "18.3 fb^{-1}"
+CMS_lumi.writeExtraText = 1
+CMS_lumi.extraText = "Simulation Preliminary"
+CMS_lumi.lumi_sqrtS = "14 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
+
+iPos = 11
+if (iPos == 0): CMS_lumi.relPosX = 0.12
+
+H_ref = 600;
+W_ref = 800;
+W = W_ref
+H  = H_ref
+
+iPeriod = 0
+
+# references for T, B, L, R
+T = 0.08*H_ref
+B = 0.12*H_ref
+L = 0.12*W_ref
+R = 0.04*W_ref
+
 def main():
 
   for i_histo in range(0,len(HISTONAMES)) :
     if VERBOSE : 
       print("> Plotting %s histogram:"%HISTONAMES[i_histo])
     c = TCanvas("c","c")
+
+# From https://twiki.cern.ch/twiki/pub/CMS/Internal/FigGuidelines/myMacro.py.txt
+    c = TCanvas("c2","c2",50,50,W,H)
+    c.SetFillColor(0)
+    c.SetBorderMode(0)
+    c.SetFrameFillStyle(0)
+    c.SetFrameBorderMode(0)
+    c.SetLeftMargin( L/W )
+    c.SetRightMargin( R/W )
+    c.SetTopMargin( T/H )
+    c.SetBottomMargin( B/H )
+    c.SetTickx(0)
+    c.SetTicky(0)
+
     c.SetGrid()
 #    gROOT.SetBatch(True);
 
     gPad.Update()
-    leg = TLegend(0.53,0.70,0.75,0.90)
+    leg = TLegend(0.53,0.60,0.75,0.90)
     leg.SetTextSize(0.03)
     leg.SetHeader(SAMPLE)
 
-    if VERBOSE : print("  Input files used:")
+    if VERBOSE: print("  Input files:")
     for i_gr in range(0,len(INPUTFILES)):
-      if VERBOSE : print("  %s"%(INPUTFILES[i_gr]))
+      if VERBOSE: print("  %s"%(INPUTFILES[i_gr]))
       tot_graph = ROOT.TH1F(INPUTFILES[i_gr], INPUTFILES[i_gr], len(FULL_ITERS), 0., len(FULL_ITERS))
       GRAPHS.append(tot_graph)
       inputTFile = TFile(INPUTFILES[i_gr], "r")
+      if inputTFile.IsZombie(): continue
       for i_iter in range(0,len(FULL_ITERS)) :
-        histofullname = HISTOPREFIX+FULL_ITERS[i_iter]+'/'+HISTONAMES[i_histo]
+        histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/'+HISTONAMES[i_histo]
         graph = inputTFile.Get(histofullname)
         #print(graph)
         if VERBOSE : print('    Looking at %s'%histofullname)
@@ -86,19 +135,21 @@ def main():
         tot_graph.GetXaxis().SetBinLabel(i_iter+1,"%s" % LABEL_ITERS[i_iter] )
 
       inputTFile.Close()
-      tot_graph.SetMarkerStyle(MARKERS[i_gr])
+      tot_graph.SetMarkerStyle(i_gr + 2)
       tot_graph.SetMarkerColor(COLORS[i_gr])
       tot_graph.SetLineColor(COLORS[i_gr])
       tot_graph.SetLineWidth(len(INPUTFILES)-i_gr)
       tot_graph.SetMarkerSize(1.3)
-      tot_graph.SetMaximum(1.5)
-      tot_graph.SetLabelSize(0.07)
-      tot_graph.GetYaxis().SetTitle("Tracksters Efficiency")
       if i_gr == 0 :
+        tot_graph.SetMaximum(1.5)
+        tot_graph.SetLabelSize(0.07)
+        tot_graph.GetYaxis().SetTitle("Tracksters Efficiency ")
+        tot_graph.GetYaxis().SetTitleOffset(0.8)
         tot_graph.Draw("P0")
       else :
         tot_graph.Draw("P0same")
 
+      CMS_lumi.CMS_lumi(c, iPeriod, iPos)
       leg.AddEntry(tot_graph, LABELS[i_gr], "PL")
 
       gPad.Update()
