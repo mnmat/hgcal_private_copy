@@ -12,9 +12,10 @@ parser.add_argument('-v', '--verbose', help="increase output verbosity", action=
 args = parser.parse_args()
 
 VERBOSE = args.verbose
+TEST = args.test
+if TEST : VERBOSE = True
 if VERBOSE : print(args)
 
-TEST = args.test
 TAG  = args.tag
 
 samples = args.sample

@@ -24,11 +24,12 @@ if args.energies == ['all']:
   ENERGIES = ['10', '20', '50', '100', '200', '300']
 
 VERBOSE = args.verbose
+TEST = args.test
+if TEST : VERBOSE = True
 if VERBOSE : print(args)
 
 PATHIN  = args.folderin+'/'
 PATHOUT = args.folderout+'/'
-TEST = args.test
 TAG  = args.tag
 
 def create_command(folderin, folderout, sample, tag):
