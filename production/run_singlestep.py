@@ -50,3 +50,25 @@ else:
       if not TEST:
         os.system(command)
 
+#if args.step == 'step3':
+#  if VERBOSE : print('running step3')
+#  for sample in samples:
+#    outputFolder = "{}/{}_{}_hgcalCenter/".format(folder, sample, genProducer[sample])
+#    for en in energies:
+#      log = 'log/'+TAG+'_'+args.step+'_'+sample+'_'+en+'GeV.log'
+#      command = "cmsRun step3.py %s %s %s >& %s &"%(en, sample, outputFolder, log)
+#      print(command)
+#      if not TEST:
+#        os.system(command)
+#
+#if args.step == 'step4':
+#  if VERBOSE : print('running step4')
+#  for sample in samples:
+#    outputFolder = "{}/{}_{}_hgcalCenter/".format(folder, sample, genProducer[sample])
+#    for en in energies:
+#      log = 'log/'+TAG+'_'+args.step+'_'+sample+'_'+en+'GeV.log'
+#      command = "cmsRun step4.py %s %s %s >& %s &"%(en, sample, outputFolder, log)
+#      print(command)
+#      if not TEST:
+#        os.system(command)
+#
