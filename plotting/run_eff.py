@@ -1,7 +1,7 @@
 import os
 from collections import OrderedDict
 
-SAMPLE_LABEL = ["\"Single photons, 1 simCluster\"", "\"Single pions, 1 simCluster\"", "\"Single electrons, 1 simCluster\"", "\"Single kaons, 1 simCluster\""]
+SAMPLE_LABEL = ["\"Single #gamma, non-converted\"", "\"Single #pi^{#pm}, non-converted\"", "\"Single e^{#pm}, non-converted\"", "\"Single K^{0}_{L}, non-converted\""]
 SAMPLES = ["singlephoton", "singlepi", "singleel", "singleKaonL"]
 #SAMPLE_LABEL = ["\"Single pions, 1 Sim Clu\""]
 #SAMPLES = ["singlepi"]
@@ -10,11 +10,13 @@ GENPRODUCER = {'singlephoton':"closeBy", 'singlepi':"flatEGun", 'singleel':"flat
 RELEASE_TAG = ["vanilla"]
 
 iterLabel = OrderedDict([#("Dummy","Dummy"), 
-			 ("Merge","Global"), ("TrkEM","TrkEM"), ("EM","EM"), ("Trk","TrkHAD"), ("HAD","HAD")])
+			 ("TrkEM","TrkEM"), ("EM","EM"), ("Trk","TrkHAD"), ("HAD","HAD")
+                         , ("Merge","Merge")
+                        ])
 ITERS = [' '.join("\""+iterLabel[ticlIter]+":ticlMultiClustersFromTracksters"+ticlIter+"\"" for ticlIter in iterLabel)]
 
-PATHFILESIN = "/data2/user/ebrondol/HGCal/HGCDoublet_validation/CMSSW_11_2_0_pre10/TICLv3_11_2_X_pre10/production/"
-#PATHFILESIN = "/data2/user/lecriste/HGCal/samples/TICLDebugger/EMTrackSeeded/92c59aa-pre10_model138329a/"
+#PATHFILESIN = "/data2/user/ebrondol/HGCal/HGCDoublet_validation/CMSSW_11_2_0_pre10/TICLv3_11_2_X_pre10/production/"
+PATHFILESIN = "/data2/user/lecriste/HGCal/samples/TICLDebugger/EMTrackSeeded/92c59aa-pre10_model138329a/"
 
 energies_features = OrderedDict([#("10",91), 
 ("50",94), ("100",64), ("200",57), ("300",52)])
