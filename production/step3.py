@@ -13,10 +13,12 @@ import sys
 import os, errno
 en_str = sys.argv[2]
 nameprefix = sys.argv[3]
-folder = sys.argv[4]
-infile_  = "file:{}/step2/step2_{}_e{}GeV_nopu.root".format(folder, nameprefix, en_str)
 
-outfolder = folder + '/step3/'
+infolder = sys.argv[4]
+infile_  = "file:{}/step2/step2_{}_e{}GeV_nopu.root".format(infolder, nameprefix, en_str)
+
+outfolder = sys.argv[5]
+outfolder = outfolder + '/step3/'
 if not os.path.exists(outfolder):
    try:
       os.makedirs(outfolder)

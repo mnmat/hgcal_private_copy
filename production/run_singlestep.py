@@ -3,6 +3,8 @@ import os
 import argparse
 
 parser = argparse.ArgumentParser(description='Run step3 or 4 on several samples')
+parser.add_argument('--folderin', type=str, help='Name of input folder (if any)')
+parser.add_argument('--folderout', type=str, help='Name of output folder (if none is given, the input one is used)', default=None)
 parser.add_argument('--sample', help="Data sample", choices=['singlepi', 'singlephoton', 'singleel', 'singleKaonL', 'all'], type=str, nargs='+')
 parser.add_argument('--energies', help="Energies for each sample", choices=['10', '20', '50', '100', '200', '300', 'all'], type=str, nargs='+')
 parser.add_argument('--step', help="Steps to run", choices=['step1', 'step2', 'step3', 'step4'], type=str)
@@ -27,25 +29,28 @@ if args.energies == ['all']:
   energies = ['10', '20', '50', '100', '200', '300']
 
 genProducer = {'singlephoton':"closeBy", 'singlepi':"flatEGun", 'singleel':"flatEGun", 'singleKaonL':"closeBy"}
-folder = '/data2/user/ebrondol/HGCal/production/'+TAG+'/CMSSW_11_3_0_pre4/'
 
 if args.step == 'step1':
   if VERBOSE : print('running step1')
   for sample in samples:
-    outputFolder = "{}/{}_{}_hgcalCenter/".format(folder, sample, genProducer[sample])
+    outFolder = "{}/{}_{}_hgcalCenter/".format(args.folderout, sample, genProducer[sample])
     for en in energies:
       log = 'log/'+TAG+'_'+args.step+'_'+sample+'_'+en+'GeV.log'
-      command = "cmsRun step1_%s.py %s %s %s >& %s &"%(genProducer[sample], en, sample, outputFolder, log)
+      command = "cmsRun step1_%s.py %s %s %s >& %s &"%(genProducer[sample], en, sample, outFolder, log)
       print(command)
       if not TEST:
         os.system(command)
 else:
   if VERBOSE : print('running %s'%args.step)
   for sample in samples:
-    outputFolder = "{}/{}_{}_hgcalCenter/".format(folder, sample, genProducer[sample])
+    inFolder = "{}/{}_{}_hgcalCenter/".format(args.folderin, sample, genProducer[sample])
+    if args.folderout is None:
+      outFolder = inFolder
+    else:
+      outFolder = "{}/{}_{}_hgcalCenter/".format(args.folderout, sample, genProducer[sample])
     for en in energies:
       log = 'log/'+TAG+'_'+args.step+'_'+sample+'_'+en+'GeV.log'
-      command = "cmsRun %s.py %s %s %s >& %s &"%(args.step, en, sample, outputFolder, log)
+      command = "cmsRun %s.py %s %s %s %s >& %s &"%(args.step, en, sample, inFolder, outFolder, log)
       print(command)
       if not TEST:
         os.system(command)
