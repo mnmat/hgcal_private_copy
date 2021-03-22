@@ -41,7 +41,7 @@ for feature in args.features:
 
 SAMPLE = args.sample
 HISTOPREFIX = 'DQMData/Run 1/HGCAL/Run summary/HGCalValidator'
-if 'non' in LABELS[0]:
+if 'non' in SAMPLE:
   HISTOPREFIX += '_1SimCl'
 
 HISTONAMES = ["globalEfficiencies"]
