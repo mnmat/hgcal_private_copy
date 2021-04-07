@@ -4,7 +4,7 @@
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-from ROOT import gROOT, TFile, TCanvas, TGraph, TLegend, gPad, TLatex
+from ROOT import gROOT, TFile, TCanvas, TGraph, TLegend, gPad, TLatex, TLine
 import json, array
 import argparse
 
@@ -78,7 +78,7 @@ if (iPos == 0): CMS_lumi.relPosX = 0.12
 H_ref = 600;
 W_ref = 800;
 W = W_ref
-H  = H_ref
+H = H_ref
 
 iPeriod = 0
 
@@ -90,7 +90,7 @@ R = 0.04*W_ref
 
 def main():
 
-  for i_histo in range(0,len(HISTONAMES)) :
+  for i_histo in range(0, len(HISTONAMES)) :
     if VERBOSE : 
       print("> Plotting %s histogram:"%HISTONAMES[i_histo])
     c = TCanvas("c","c")
@@ -117,13 +117,13 @@ def main():
     leg.SetHeader(SAMPLE)
 
     if VERBOSE: print("  Input files:")
-    for i_gr in range(0,len(INPUTFILES)):
+    for i_gr in range(0, len(INPUTFILES)):
       if VERBOSE: print("  %s"%(INPUTFILES[i_gr]))
       tot_graph = ROOT.TH1F(INPUTFILES[i_gr], INPUTFILES[i_gr], len(FULL_ITERS), 0., len(FULL_ITERS))
       GRAPHS.append(tot_graph)
       inputTFile = TFile(INPUTFILES[i_gr], "r")
       if inputTFile.IsZombie(): continue
-      for i_iter in range(0,len(FULL_ITERS)) :
+      for i_iter in range(0, len(FULL_ITERS)) :
         histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/'+HISTONAMES[i_histo]
         graph = inputTFile.Get(histofullname)
         #print(graph)
@@ -149,11 +149,16 @@ def main():
       else :
         tot_graph.Draw("P0same")
 
-      CMS_lumi.CMS_lumi(c, iPeriod, iPos)
       leg.AddEntry(tot_graph, LABELS[i_gr], "PL")
 
-      gPad.Update()
-      leg.Draw("same")
+    gPad.Update()
+    leg.Draw("same")
+
+    if LABEL_ITERS[-1] == "Merge":
+      vert = TLine(len(FULL_ITERS)-1, gPad.GetUymin(), len(FULL_ITERS)-1, gPad.GetUymax())
+      vert.Draw()
+
+    CMS_lumi.CMS_lumi(c, iPeriod, iPos)
 
     c.Draw()
     nameOutputPlot = OUTPUTFOLDER+HISTONAMES[i_histo]
