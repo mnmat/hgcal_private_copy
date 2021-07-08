@@ -42,7 +42,7 @@ def create_command(folderin, folderout, sample, tag):
     filesin += final_folderin+'/DQM_V0001_R000000001__step4_'+sample+'__e'+en+'GeV__nopu.root '
 
   #command = 'makeHGCalValidationPlots.py '+filesin+' -o '+final_folder+' --png --collection all'
-  command = 'makeHGCalValidationPlots.py '+filesin+' -o '+final_folderout+' --png --collection allTiclMultiClusters'
+  command = 'makeHGCalValidationPlots.py '+filesin+' -o '+final_folderout+' --png --collection tracksters'
   if args.separate : 
     command += ' --separate '
   command += ' >& '+log+' &'
