@@ -76,8 +76,8 @@ AXISTITLE = args.varAxes
 def main():
   for i_histo in range(0,len(HISTONAMES)) :
     if VERBOSE : 
-      print("> Plotting %s histogram:"%HISTONAMES[i_histo])
-      print("  Axis titles = %s"%(AXISTITLE[i_histo]))
+      print(("> Plotting %s histogram:"%HISTONAMES[i_histo]))
+      print(("  Axis titles = %s"%(AXISTITLE[i_histo])))
 #      print("  X axis: min = %.2f, max = %.2f, isLog = %s"%(MINXAXIS[i_histo],MAXXAXIS[i_histo],AXISXLOG[i_histo]))
 #      print("  Y axis: min = %.2f, max = %.2f, isLog = %s"%(MINYAXIS[i_histo],MAXYAXIS[i_histo],AXISYLOG[i_histo]))
     c = TCanvas("c","c")
@@ -105,7 +105,7 @@ def main():
 #      leg.SetHeader("t#bar{t}, E_{CM} = 380 GeV")
 #
     if VERBOSE : print("  Input files used:")
-    if VERBOSE : print("  %s"%(INPUTFILES[0]))
+    if VERBOSE : print(("  %s"%(INPUTFILES[0])))
     inputTFile = TFile(INPUTFILES[0])
     graph = inputTFile.Get(HISTOPREFIX+HISTONAMES[i_histo])
     graph.SetTitle(AXISTITLE[i_histo])
@@ -125,7 +125,7 @@ def main():
 #      else : 
 #        graph.Draw("same")
 
-    if VERBOSE : print("  %s"%(INPUTFILES[1]))
+    if VERBOSE : print(("  %s"%(INPUTFILES[1])))
 
     inputTFile2 = TFile(INPUTFILES[1])
     graph2 = inputTFile2.Get(HISTOPREFIX+HISTONAMES[i_histo])

@@ -78,8 +78,8 @@ GRAPHS = []
 def main():
   for i_histo in range(0,len(HISTONAMES)) :
     if VERBOSE : 
-      print("> Plotting %s histogram:"%HISTONAMES[i_histo])
-      print("  Axis titles = %s"%(AXISTITLE[i_histo]))
+      print(("> Plotting %s histogram:"%HISTONAMES[i_histo]))
+      print(("  Axis titles = %s"%(AXISTITLE[i_histo])))
 #      print("  X axis: min = %.2f, max = %.2f, isLog = %s"%(MINXAXIS[i_histo],MAXXAXIS[i_histo],AXISXLOG[i_histo]))
 #      print("  Y axis: min = %.2f, max = %.2f, isLog = %s"%(MINYAXIS[i_histo],MAXYAXIS[i_histo],AXISYLOG[i_histo]))
     c = TCanvas("c","c")
@@ -95,8 +95,35 @@ def main():
     leg.SetTextSize(0.03)
     leg.SetHeader(SAMPLE)
 
+#    # Why this does not work??
+#    for i_gr in range(0, len(INPUTFILES)):
+#      if VERBOSE: print(("  %s"%(INPUTFILES[i_gr])))
+#      inputTFile = TFile(INPUTFILES[i_gr], "r")
+#      if inputTFile.IsZombie(): continue
+#      graph = inputTFile.Get(HISTOPREFIX+HISTONAMES[i_histo])
+#      print(graph)
+#   
+#      GRAPHS.append(graph)
+# 
+#      graph.SetMarkerStyle(MARKERS[i_gr])
+#      graph.SetMarkerColor(COLORS[i_gr])
+#      graph.SetLineColor(COLORS[i_gr])
+#      graph.SetMarkerSize(1.3)
+#      graph.SetLineWidth(2)
+#      graph.Draw("histsame")
+
+#      if i_gr == 0 :
+#        graph.SetTitle(AXISTITLE[i_histo])
+#        graph.SetMinimum(0)
+#        graph.SetMaximum(200)
+#        graph.GetXaxis().SetRangeUser(0.,700.);
+#        graph.Draw("hist")
+#      else :
+#        graph.Draw("histsame")
+#      leg.AddEntry(graph, LABELS[i_gr], "L")
+
     if VERBOSE : print("  Input files used:")
-    if VERBOSE : print("  %s"%(INPUTFILES[0]))
+    if VERBOSE : print(("  %s"%(INPUTFILES[0])))
     inputTFile = TFile(INPUTFILES[0])
     graph = inputTFile.Get(HISTOPREFIX+HISTONAMES[i_histo])
     print(graph)
@@ -112,7 +139,7 @@ def main():
 
     graph.Draw("")
 
-    if VERBOSE : print("  %s"%(INPUTFILES[1]))
+    if VERBOSE : print(("  %s"%(INPUTFILES[1])))
 
     inputTFile2 = TFile(INPUTFILES[1])
     graph2 = inputTFile2.Get(HISTOPREFIX+HISTONAMES[i_histo])
@@ -147,24 +174,24 @@ def main():
 
     graph4.Draw("same")
 
-    inputTFile5 = TFile(INPUTFILES[4])
-    graph5 = inputTFile5.Get(HISTOPREFIX+HISTONAMES[i_histo])
-    graph5.SetTitle(AXISTITLE[i_histo])
-    graph5.SetMarkerStyle(MARKERS[4])
-    graph5.SetMarkerSize(1.3)
-    graph5.SetMarkerColor(COLORS[4])
-    graph5.SetLineColor(COLORS[4])
-    graph5.SetLineWidth(2)
-
-    graph5.Draw("same")
+#    inputTFile5 = TFile(INPUTFILES[4])
+#    graph5 = inputTFile5.Get(HISTOPREFIX+HISTONAMES[i_histo])
+#    graph5.SetTitle(AXISTITLE[i_histo])
+#    graph5.SetMarkerStyle(MARKERS[4])
+#    graph5.SetMarkerSize(1.3)
+#    graph5.SetMarkerColor(COLORS[4])
+#    graph5.SetLineColor(COLORS[4])
+#    graph5.SetLineWidth(2)
+#
+#    graph5.Draw("same")
 
     leg.AddEntry(graph, LABELS[0], "L")
     leg.AddEntry(graph2, LABELS[1], "L")
     leg.AddEntry(graph3, LABELS[2], "L")
     leg.AddEntry(graph4, LABELS[3], "L")
-    leg.AddEntry(graph5, LABELS[4], "L")
+#    leg.AddEntry(graph5, LABELS[4], "L")
+    gPad.Update()
     leg.Draw("same")
-
 
     c.Draw()
     nameOutputPlot = OUTPUTFOLDER+HISTONAMES[i_histo]

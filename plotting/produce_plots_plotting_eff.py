@@ -92,7 +92,7 @@ def main():
 
   for i_histo in range(0, len(HISTONAMES)) :
     if VERBOSE : 
-      print("> Plotting %s histogram:"%HISTONAMES[i_histo])
+      print(("> Plotting %s histogram:"%HISTONAMES[i_histo]))
     c = TCanvas("c","c")
 
 # From https://twiki.cern.ch/twiki/pub/CMS/Internal/FigGuidelines/myMacro.py.txt
@@ -118,7 +118,7 @@ def main():
 
     if VERBOSE: print("  Input files:")
     for i_gr in range(0, len(INPUTFILES)):
-      if VERBOSE: print("  %s"%(INPUTFILES[i_gr]))
+      if VERBOSE: print(("  %s"%(INPUTFILES[i_gr])))
       tot_graph = ROOT.TH1F(INPUTFILES[i_gr], INPUTFILES[i_gr], len(FULL_ITERS), 0., len(FULL_ITERS))
       GRAPHS.append(tot_graph)
       inputTFile = TFile(INPUTFILES[i_gr], "r")
@@ -127,7 +127,7 @@ def main():
         histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/'+HISTONAMES[i_histo]
         graph = inputTFile.Get(histofullname)
         #print(graph)
-        if VERBOSE : print('    Looking at %s'%histofullname)
+        if VERBOSE : print(('    Looking at %s'%histofullname))
         #print(graph.GetBinContent(1))
         #print(graph.GetBinError(1))
         tot_graph.SetBinContent(i_iter+1, graph.GetBinContent(1))
