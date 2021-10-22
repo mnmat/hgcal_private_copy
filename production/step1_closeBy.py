@@ -1,3 +1,4 @@
+# Last update with 12_0_1_pre4
 # Auto generated configuration file
 # using: 
 # Revision: 1.19 
@@ -47,7 +48,7 @@ process.load('Configuration.Geometry.GeometryExtended2026D49Reco_cff')
 process.load('Configuration.Geometry.GeometryExtended2026D49_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
-process.load('IOMC.EventVertexGenerators.VtxSmearedHLLHC_cfi')
+process.load('IOMC.EventVertexGenerators.VtxSmearedHGCALCloseBy_cfi')
 process.load('GeneratorInterface.Core.genFilterSummary_cff')
 process.load('Configuration.StandardSequences.SimIdeal_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
@@ -69,17 +70,18 @@ process.options = cms.untracked.PSet(
     allowUnscheduled = cms.obsolete.untracked.bool,
     canDeleteEarly = cms.untracked.vstring(),
     deleteNonConsumedUnscheduledModules = cms.untracked.bool(True),
+    dumpOptions = cms.untracked.bool(False),
     emptyRunLumiMode = cms.obsolete.untracked.string,
     eventSetup = cms.untracked.PSet(
         forceNumberOfConcurrentIOVs = cms.untracked.PSet(
             allowAnyLabel_=cms.required.untracked.uint32
         ),
-        numberOfConcurrentIOVs = cms.untracked.uint32(1)
+        numberOfConcurrentIOVs = cms.untracked.uint32(0)
     ),
     fileMode = cms.untracked.string('FULLMERGE'),
     forceEventSetupCacheClearOnNewRun = cms.untracked.bool(False),
     makeTriggerResults = cms.obsolete.untracked.bool,
-    numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(1),
+    numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(0),
     numberOfConcurrentRuns = cms.untracked.uint32(1),
     numberOfStreams = cms.untracked.uint32(0),
     numberOfThreads = cms.untracked.uint32(1),
@@ -132,11 +134,11 @@ process.generator = cms.EDProducer("CloseByParticleGunProducer",
         Overlapping = cms.bool(False),
         PartID = cms.vint32(int(part_id)),
         Pointing = cms.bool(True),
-        RMax = cms.double(60.), #HGC min = 60.
-        RMin = cms.double(120.), #HGC max = 120
+        RMax = cms.double(120), #HGC min = 60.
+        RMin = cms.double(60), #HGC max = 120
         RandomShoot = cms.bool(False),
-        ZMax = cms.double(321.1), #HGC max = 650
-        ZMin = cms.double(320.9) #HGC min = 320
+        ZMax = cms.double(321), #HGC max = 650
+        ZMin = cms.double(320) #HGC min = 320
     ),
     Verbosity = cms.untracked.int32(0),
     firstRun = cms.untracked.uint32(1),
