@@ -2,10 +2,10 @@ import os
 from collections import OrderedDict
 
 
-#SAMPLE_LABEL = ["Single photons", "Single pions", "Single electrons", "Single kaons"]
+#SAMPLE_LABEL = ["Single #gamma", "Single #pi^{#pm}", "Single e^{#pm}", "Single K^{0}_{L}"]
 #SAMPLE_FILE = ["singlephoton", "singlepi", "singleel", "singleKaonL"]
-SAMPLE_LABEL = ["Single pions"]
-SAMPLE_FILE = ["singlepi"]
+SAMPLE_LABEL = ["Single #gamma"]
+SAMPLE_FILE = ["singlephoton"]
 GENPRODUCER = {'singlephoton':"closeBy", 'singlepi':"flatEGun", 'singleel':"flatEGun", 'singleKaonL':"closeBy"}
 
 RELEASE_TAG = ["vanilla"]
@@ -17,7 +17,7 @@ energies_features = OrderedDict([#("10",91),
 FEATURES = ' '.join("\"E = "+key+" GeV:"+str(energies_features[key])+":21\"" for key in energies_features)
 
 for tag in RELEASE_TAG :
-  PATHFILESIN = "/data2/user/ebrondol/HGCal/production/CMSSW_12_0_0_pre3/"+tag+"/"
+  PATHFILESIN = "/data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/"+tag+"/"
   for i_label,i_sample in zip(SAMPLE_LABEL,SAMPLE_FILE):
     inputFolder = "{}/{}_{}_hgcalCenter/step4/".format(PATHFILESIN, i_sample, GENPRODUCER[i_sample])
     FILENAMES = ["DQM_V0001_R000000001__step4_"+i_sample+"__e"+key+"GeV__nopu.root" for key in energies_features]
@@ -37,7 +37,7 @@ for tag in RELEASE_TAG :
       #AXISTITLES = "\";Raw Energy;#Tracksters\""
  
       final_label = "\"" + i_label + ", " + i_iter + " iter only"  + "\""
-      command_plot = "python3 produce_plots_plotting_energy.py --filesin %s --folderout %s --histoprefix %s --histonames %s --varAxes %s --sample %s --features %s -v"%(listFilein,PATHFILESOUT,HISTOPREFIX,HISTONAMES,AXISTITLES,final_label,FEATURES)
+      command_plot = "python3 plotting_energy.py --filesin %s --folderout %s --histoprefix %s --histonames %s --varAxes %s --sample %s --features %s -v"%(listFilein,PATHFILESOUT,HISTOPREFIX,HISTONAMES,AXISTITLES,final_label,FEATURES)
   
       print(command_plot)
       os.system(command_plot)

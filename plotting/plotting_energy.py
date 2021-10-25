@@ -1,5 +1,6 @@
+# Last update with 12_0_1_pre4
 # Command example
-# python produce_plots_plotting_energy.py --filesin /home/ericabro/ericabro_cernbox/HGCal_Software/EMTrackSeeded/after_60c3c21/DQM_V0001_R000000001__step4_singlephoton__e10GeV__nopu.root /home/ericabro/ericabro_cernbox/HGCal_Software/EMTrackSeeded/after_60c3c21/DQM_V0001_R000000001__step4_singlephoton__e50GeV__nopu.root /home/ericabro/ericabro_cernbox/HGCal_Software/EMTrackSeeded/after_60c3c21/DQM_V0001_R000000001__step4_singlephoton__e100GeV__nopu.root /home/ericabro/ericabro_cernbox/HGCal_Software/EMTrackSeeded/after_60c3c21/DQM_V0001_R000000001__step4_singlephoton__e200GeV__nopu.root /home/ericabro/ericabro_cernbox/HGCal_Software/EMTrackSeeded/after_60c3c21/DQM_V0001_R000000001__step4_singlephoton__e300GeV__nopu.root --folderout plots_photons_EM/ -v --varAxes ";Raw Energy;#Tracksters" --features "photons, E = 10 GeV:91:22" "photons, E = 50 GeV:94:21" "photons, E = 100 GeV:64:21" "photons, E = 200 GeV:57:21" "photons, E = 300 GeV:52:21" --histonames 'multicluster_energy' --histoprefix "DQMData/Run 1/HGCAL/Run summary/HGCalValidator/ticlMultiClustersFromTrackstersEM/" --sample "Single photons, EM iter only" 
+# python3 plotting_energy.py --filesin /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/vanilla//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e50GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/vanilla//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e100GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/vanilla//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e200GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/vanilla//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e300GeV__nopu.root  --folderout vanilla/singlephoton_EM/ --histoprefix "DQMData/Run 1/HGCAL/Run summary/HGCalValidator/ticlTrackstersEM/" --histonames "trackster_energy" --varAxes ";Regressed Energy;#Tracksters" --sample "Single #gamma, EM iter only" --features "E = 50 GeV:94:21" "E = 100 GeV:64:21" "E = 200 GeV:57:21" "E = 300 GeV:52:21" -v 
 
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -126,7 +127,6 @@ def main():
     if VERBOSE : print(("  %s"%(INPUTFILES[0])))
     inputTFile = TFile(INPUTFILES[0])
     graph = inputTFile.Get(HISTOPREFIX+HISTONAMES[i_histo])
-    print(graph)
     graph.SetTitle(AXISTITLE[i_histo])
     graph.SetMarkerStyle(MARKERS[0])
     graph.SetMarkerSize(1.3)
@@ -140,7 +140,6 @@ def main():
     graph.Draw("")
 
     if VERBOSE : print(("  %s"%(INPUTFILES[1])))
-
     inputTFile2 = TFile(INPUTFILES[1])
     graph2 = inputTFile2.Get(HISTOPREFIX+HISTONAMES[i_histo])
     graph2.SetTitle(AXISTITLE[i_histo])
@@ -152,6 +151,7 @@ def main():
 
     graph2.Draw("same")
 
+    if VERBOSE : print(("  %s"%(INPUTFILES[2])))
     inputTFile3 = TFile(INPUTFILES[2])
     graph3 = inputTFile3.Get(HISTOPREFIX+HISTONAMES[i_histo])
     graph3.SetTitle(AXISTITLE[i_histo])
@@ -163,6 +163,7 @@ def main():
 
     graph3.Draw("same")
 
+    if VERBOSE : print(("  %s"%(INPUTFILES[3])))
     inputTFile4 = TFile(INPUTFILES[3])
     graph4 = inputTFile4.Get(HISTOPREFIX+HISTONAMES[i_histo])
     graph4.SetTitle(AXISTITLE[i_histo])
@@ -174,6 +175,7 @@ def main():
 
     graph4.Draw("same")
 
+#    if VERBOSE : print(("  %s"%(INPUTFILES[4])))
 #    inputTFile5 = TFile(INPUTFILES[4])
 #    graph5 = inputTFile5.Get(HISTOPREFIX+HISTONAMES[i_histo])
 #    graph5.SetTitle(AXISTITLE[i_histo])

@@ -1,5 +1,6 @@
+# Last update with 12_0_1_pre4
 # Command example
-# python produce_plots_plotting_eff.py --filesin /home/ericabro/ericabro_cernbox/HGCal_Software/EMTrackSeeded/after_60c3c21/DQM_V0001_R000000001__step4_singlephoton__e10GeV__nopu.root /home/ericabro/ericabro_cernbox/HGCal_Software/EMTrackSeeded/after_60c3c21/DQM_V0001_R000000001__step4_singlephoton__e100GeV__nopu.root --folderout plots_photons/ -v --features "E = 10 GeV:91:22" "E = 100 GeV:64:21" --sample "Single photons" --iters "EM:ticlMultiClustersFromTrackstersEM" "Global:ticlMultiClustersFromTrackstersMerge"
+# python3 plotting_eff.py --filesin /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e50GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e100GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e200GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e300GeV__nopu.root  --folderout clue3D/singlephoton/ --sample "Single #gamma" --features "E = 50 GeV:94:21" "E = 100 GeV:64:21" "E = 200 GeV:57:21" "E = 300 GeV:52:21" --iter "TrkEM:ticlTrackstersTrkEM" "EM:ticlTrackstersEM" "TrkHAD:ticlTrackstersTrk" "HAD:ticlTrackstersHAD" "Merge:ticlTrackstersMerge" -v
 
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -88,7 +89,7 @@ B = 0.12*H_ref
 L = 0.12*W_ref
 R = 0.04*W_ref
 
-def main():
+def singlePlot(label):
 
   for i_histo in range(0, len(HISTONAMES)) :
     if VERBOSE : 
@@ -124,17 +125,19 @@ def main():
       inputTFile = TFile(INPUTFILES[i_gr], "r")
       if inputTFile.IsZombie(): continue
       for i_iter in range(0, len(FULL_ITERS)) :
-        histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/'+HISTONAMES[i_histo]
+        histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/TSToCP_linking/'+HISTONAMES[i_histo]
         graph = inputTFile.Get(histofullname)
         #print(graph)
         if VERBOSE : print(('    Looking at %s'%histofullname))
         #print(graph.GetBinContent(1))
         #print(graph.GetBinError(1))
-        tot_graph.SetBinContent(i_iter+1, graph.GetBinContent(1))
-        tot_graph.SetBinError(i_iter+1, graph.GetBinError(1))
-        tot_graph.GetXaxis().SetBinLabel(i_iter+1,"%s" % LABEL_ITERS[i_iter] )
-
-      inputTFile.Close()
+        for i in range(0,graph.GetNbinsX()) :
+          if graph.GetXaxis().GetBinLabel(i) == label:
+            tot_graph.SetBinContent(i_iter+1, graph.GetBinContent(i))
+            tot_graph.SetBinError(i_iter+1, graph.GetBinError(i))
+            tot_graph.GetXaxis().SetBinLabel(i_iter+1,"%s" % LABEL_ITERS[i_iter] )
+          else :
+            continue
       tot_graph.SetMarkerStyle(i_gr + 2)
       tot_graph.SetMarkerColor(COLORS[i_gr])
       tot_graph.SetLineColor(COLORS[i_gr])
@@ -143,11 +146,22 @@ def main():
       if i_gr == 0 :
         tot_graph.SetMaximum(1.5)
         tot_graph.SetLabelSize(0.07)
-        tot_graph.GetYaxis().SetTitle("Tracksters Efficiency ")
+        if label == "effic_eta":
+          tot_graph.GetYaxis().SetTitle("Tracksters Efficiency")
+        elif label == "purity_eta":
+          tot_graph.GetYaxis().SetTitle("Tracksters Purity")
+        elif label == "duplicate_eta":
+          tot_graph.GetYaxis().SetTitle("Tracksters Duplicate Rate")
+        elif label == "fake_eta":
+          tot_graph.GetYaxis().SetTitle("Tracksters Fake Rate")
+        elif label == "merge_eta":
+          tot_graph.GetYaxis().SetTitle("Tracksters Merge Rate")
         tot_graph.GetYaxis().SetTitleOffset(0.8)
         tot_graph.Draw("P0")
       else :
         tot_graph.Draw("P0same")
+
+      inputTFile.Close()
 
       leg.AddEntry(tot_graph, LABELS[i_gr], "PL")
 
@@ -161,7 +175,7 @@ def main():
     CMS_lumi.CMS_lumi(c, iPeriod, iPos)
 
     c.Draw()
-    nameOutputPlot = OUTPUTFOLDER+HISTONAMES[i_histo]
+    nameOutputPlot = OUTPUTFOLDER+HISTONAMES[i_histo]+"_"+label
     c.SaveAs(nameOutputPlot+".eps","eps")
     c.SaveAs(nameOutputPlot+".png","png")
 
@@ -169,4 +183,6 @@ def main():
   return
 
 if __name__ == "__main__":
-    main()
+  labels = ["effic_eta", "purity_eta", "duplicate_eta", "fake_eta", "merge_eta"]
+  for lab in labels:
+    singlePlot(lab)
