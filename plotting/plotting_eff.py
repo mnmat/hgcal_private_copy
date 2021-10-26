@@ -1,11 +1,11 @@
 # Last update with 12_0_1_pre4
 # Command example
-# python3 plotting_eff.py --filesin /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e50GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e100GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e200GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e300GeV__nopu.root  --folderout clue3D/singlephoton/ --sample "Single #gamma" --features "E = 50 GeV:94:21" "E = 100 GeV:64:21" "E = 200 GeV:57:21" "E = 300 GeV:52:21" --iter "TrkEM:ticlTrackstersTrkEM" "EM:ticlTrackstersEM" "TrkHAD:ticlTrackstersTrk" "HAD:ticlTrackstersHAD" "Merge:ticlTrackstersMerge" -v
+# python3 plotting_eff.py --filesin /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e10GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e20GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e50GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e100GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e200GeV__nopu.root /data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/clue3D//singlephoton_closeBy_hgcalCenter/step4/DQM_V0001_R000000001__step4_singlephoton__e300GeV__nopu.root  --folderout clue3D/singlephoton/ --sample "Single-#gamma, PU=0" --features "10 GeV:94:20" "20 GeV:51:5" "50 GeV:54:26" "100 GeV:64:22" "200 GeV:99:3" "300 GeV:57:23" --iter "Merge:ticlTrackstersMerge:94:20" "CLUE3DHigh:ticlTrackstersCLUE3DHigh:51:5" "CLUE3DLow:ticlTrackstersCLUE3DLow:54:26" "TrkEM:ticlTrackstersTrkEM:64:22" "EM:ticlTrackstersEM:99:3" "TrkHAD:ticlTrackstersTrk:57:23" "HAD:ticlTrackstersHAD:30:4"
 
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-from ROOT import gROOT, TFile, TCanvas, TGraph, TLegend, gPad, TLatex, TLine
+from ROOT import gROOT, TFile, TCanvas, TGraph, TH1F, TLegend, gPad, TLatex, TLine
 import json, array
 import argparse
 
@@ -14,7 +14,7 @@ def list_with_negatives(value):
   print(values)
   return values
 
-gROOT.Macro("CLICdpStyle.C") 
+#gROOT.Macro("CLICdpStyle.C") 
 parser = argparse.ArgumentParser(description='Produce root files with tracking analysis plots')
 parser.add_argument('--filesin', nargs='+', help='List of root file used as input')
 parser.add_argument('--features', nargs='+', help='List of features used for this input file as label:color:markerStyle (ex. "p_{T} = 1 GeV:1:20:False")')
@@ -30,30 +30,34 @@ if VERBOSE : print(args)
 INPUTFILES = args.filesin
 OUTPUTFOLDER = args.folderout
 
-LABELS = []
-COLORS = []
-MARKERS = []
+LABELS_EN = []
+COLORS_EN = []
+MARKERS_EN = []
 for feature in args.features:
   feat = feature.split(":")
-  #print(feat)
-  LABELS.append(feat[0])
-  COLORS.append(int(feat[1]))
-  MARKERS.append(int(feat[2]))
+  LABELS_EN.append(feat[0])
+  COLORS_EN.append(int(feat[1]))
+  MARKERS_EN.append(int(feat[2]))
+
+if len(INPUTFILES) != len(LABELS_EN):
+  print("Number of input files differs from number of energy features!")
+  exit()
 
 SAMPLE = args.sample
 HISTOPREFIX = 'DQMData/Run 1/HGCAL/Run summary/HGCalValidator'
 if 'non' in SAMPLE:
   HISTOPREFIX += '_1SimCl'
 
-HISTONAMES = ["globalEfficiencies"]
-
-LABEL_ITERS = []
+LABELS_ITERS = []
 FULL_ITERS = []
+COLORS_ITERS = []
+MARKERS_ITERS = []
 for i in args.iters:
   iter_name = i.split(":")
-  #print(iter_name)
-  LABEL_ITERS.append(iter_name[0])
+  LABELS_ITERS.append(iter_name[0])
   FULL_ITERS.append(iter_name[1])
+  COLORS_ITERS.append(int(iter_name[2]))
+  MARKERS_ITERS.append(int(iter_name[3]))
 
 GRAPHS = []
 x1 = []
@@ -64,7 +68,7 @@ import CMS_lumi, tdrstyle
 import array
 
 #set the tdr style
-#tdrstyle.setTDRStyle() # this changes too many things
+tdrstyle.setTDRStyle() # this changes too many things
 
 #change the CMS_lumi variables (see CMS_lumi.py)
 CMS_lumi.lumi_7TeV = "4.8 fb^{-1}"
@@ -73,7 +77,7 @@ CMS_lumi.writeExtraText = 1
 CMS_lumi.extraText = "Simulation Preliminary"
 CMS_lumi.lumi_sqrtS = "14 TeV" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
-iPos = 11
+iPos = 50
 if (iPos == 0): CMS_lumi.relPosX = 0.12
 
 H_ref = 600;
@@ -85,104 +89,215 @@ iPeriod = 0
 
 # references for T, B, L, R
 T = 0.08*H_ref
-B = 0.12*H_ref
+B = 0.14*H_ref
 L = 0.12*W_ref
 R = 0.04*W_ref
 
-def singlePlot(label):
+def plotVersusEnergy(label):
+  histoname = "globalEfficiencies"
+  if VERBOSE : 
+    print("> Plotting %s histogram:"%histoname)
+  c = TCanvas("c2","c2",50,50,W,H)
+  c.SetFillColor(0)
+  c.SetBorderMode(0)
+  c.SetFrameFillStyle(0)
+  c.SetFrameBorderMode(0)
+  c.SetLeftMargin( L/W )
+  c.SetRightMargin( R/W )
+  c.SetTopMargin( T/H )
+  c.SetBottomMargin( B/H )
+  c.SetTickx(0)
+  c.SetTicky(0)
+  c.SetGrid()
+  gROOT.SetBatch(True);
 
-  for i_histo in range(0, len(HISTONAMES)) :
-    if VERBOSE : 
-      print(("> Plotting %s histogram:"%HISTONAMES[i_histo]))
-    c = TCanvas("c","c")
+  gPad.Update()
+  leg = TLegend(0.40,0.70,0.95,0.90)
+  leg.SetNColumns(round(len(LABELS_ITERS)/2))
+  leg.SetTextSize(0.03)
+  leg.SetHeader(SAMPLE)
+
+  GRAPHS = []
+  NPOINTS = []
+  for label_iter in LABELS_ITERS :
+    graph_iter = TGraph()
+    graph_iter.SetName(label_iter)
+    GRAPHS.append(graph_iter)
+    NPOINTS.append(0)
+
+  if VERBOSE: print("  Input files:")
+  for i_en in range(0, len(INPUTFILES)):
+    if VERBOSE: print(("  %s"%(INPUTFILES[i_en])))
+    beginIdx = INPUTFILES[i_en].find("__e") + 3
+    endIdx = INPUTFILES[i_en].find("GeV")
+    energy = float(INPUTFILES[i_en][beginIdx:endIdx])
+    inputTFile = TFile(INPUTFILES[i_en], "r")
+    if inputTFile.IsZombie(): continue
+    ipoint = 0
+    for i_iter in range(0, len(FULL_ITERS)) :
+      histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/TSToCP_linking/'+histoname
+      graph = inputTFile.Get(histofullname)
+      for ibin in range(0,graph.GetNbinsX()) :
+        if graph.GetXaxis().GetBinLabel(ibin) == label:
+          GRAPHS[i_iter].SetPoint(NPOINTS[i_iter], energy, graph.GetBinContent(ibin))
+          NPOINTS[i_iter] = NPOINTS[i_iter] + 1
+        else :
+          continue
+
+  for i_gr in range(0, len(LABELS_ITERS)):
+    GRAPHS[i_gr].SetMarkerStyle(MARKERS_ITERS[i_gr])
+    GRAPHS[i_gr].SetMarkerColor(COLORS_ITERS[i_gr])
+    GRAPHS[i_gr].SetLineWidth(2)
+    GRAPHS[i_gr].SetLineColor(COLORS_ITERS[i_gr])
+    GRAPHS[i_gr].SetLineStyle(i_gr+1)
+    GRAPHS[i_gr].SetMarkerSize(1.3)
+    if i_gr == 0 :
+      GRAPHS[i_gr].SetMaximum(1.5)
+      GRAPHS[i_gr].SetMinimum(0.0)
+      GRAPHS[i_gr].GetYaxis().SetLabelSize(0.05)
+      GRAPHS[i_gr].GetXaxis().SetLabelSize(0.05)
+      GRAPHS[i_gr].GetYaxis().SetTitleSize(0.07)
+      GRAPHS[i_gr].GetXaxis().SetTitleSize(0.07)
+      if label == "effic_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Efficiency")
+      elif label == "purity_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Purity")
+      elif label == "duplicate_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Duplicate Rate")
+      elif label == "fake_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Fake Rate")
+      elif label == "merge_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Merge Rate")
+      GRAPHS[i_gr].GetYaxis().SetTitleOffset(0.8)
+      GRAPHS[i_gr].GetXaxis().SetTitleOffset(0.9)
+      GRAPHS[i_gr].GetXaxis().SetTitle("E_{gen} [GeV]")
+      GRAPHS[i_gr].Draw("APL")
+    else :
+      GRAPHS[i_gr].Draw("PLsame")
+    
+    leg.AddEntry(GRAPHS[i_gr], LABELS_ITERS[i_gr], "PL")
+
+    inputTFile.Close()
+
+  gPad.Update()
+  leg.Draw("same")
+
+  #CMS_lumi.CMS_lumi(c, iPeriod, iPos)
+
+  c.Draw()
+  nameOutputPlot = OUTPUTFOLDER+histoname+"_"+label+"_vsEnergy"
+  c.SaveAs(nameOutputPlot+".eps","eps")
+  c.SaveAs(nameOutputPlot+".png","png")
+  c.SaveAs(nameOutputPlot+".C","C")
+
+  return
+
+def plotDifferentIters(label):
+  histoname = "globalEfficiencies"
+
+  if VERBOSE : 
+    print(("> Plotting %s histogram:"%histoname))
+  c = TCanvas("c","c")
 
 # From https://twiki.cern.ch/twiki/pub/CMS/Internal/FigGuidelines/myMacro.py.txt
-    c = TCanvas("c2","c2",50,50,W,H)
-    c.SetFillColor(0)
-    c.SetBorderMode(0)
-    c.SetFrameFillStyle(0)
-    c.SetFrameBorderMode(0)
-    c.SetLeftMargin( L/W )
-    c.SetRightMargin( R/W )
-    c.SetTopMargin( T/H )
-    c.SetBottomMargin( B/H )
-    c.SetTickx(0)
-    c.SetTicky(0)
+  c = TCanvas("c2","c2",50,50,W,H)
+  c.SetFillColor(0)
+  c.SetBorderMode(0)
+  c.SetFrameFillStyle(0)
+  c.SetFrameBorderMode(0)
+  c.SetLeftMargin( L/W )
+  c.SetRightMargin( R/W )
+  c.SetTopMargin( T/H )
+  c.SetBottomMargin( B/H )
+  c.SetTickx(0)
+  c.SetTicky(0)
 
-    c.SetGrid()
-#    gROOT.SetBatch(True);
+  c.SetGrid()
+  gROOT.SetBatch(True);
 
-    gPad.Update()
-    leg = TLegend(0.53,0.60,0.75,0.90)
-    leg.SetTextSize(0.03)
-    leg.SetHeader(SAMPLE)
+  gPad.Update()
+  leg = TLegend(0.40,0.70,0.95,0.90)
+  leg.SetTextSize(0.03)
+  leg.SetHeader(SAMPLE)
+  leg.SetNColumns(round(len(LABELS_ITERS)/2))
 
-    if VERBOSE: print("  Input files:")
-    for i_gr in range(0, len(INPUTFILES)):
-      if VERBOSE: print(("  %s"%(INPUTFILES[i_gr])))
-      tot_graph = ROOT.TH1F(INPUTFILES[i_gr], INPUTFILES[i_gr], len(FULL_ITERS), 0., len(FULL_ITERS))
-      GRAPHS.append(tot_graph)
-      inputTFile = TFile(INPUTFILES[i_gr], "r")
-      if inputTFile.IsZombie(): continue
-      for i_iter in range(0, len(FULL_ITERS)) :
-        histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/TSToCP_linking/'+HISTONAMES[i_histo]
-        graph = inputTFile.Get(histofullname)
-        #print(graph)
-        if VERBOSE : print(('    Looking at %s'%histofullname))
-        #print(graph.GetBinContent(1))
-        #print(graph.GetBinError(1))
-        for i in range(0,graph.GetNbinsX()) :
-          if graph.GetXaxis().GetBinLabel(i) == label:
-            tot_graph.SetBinContent(i_iter+1, graph.GetBinContent(i))
-            tot_graph.SetBinError(i_iter+1, graph.GetBinError(i))
-            tot_graph.GetXaxis().SetBinLabel(i_iter+1,"%s" % LABEL_ITERS[i_iter] )
-          else :
-            continue
-      tot_graph.SetMarkerStyle(i_gr + 2)
-      tot_graph.SetMarkerColor(COLORS[i_gr])
-      tot_graph.SetLineColor(COLORS[i_gr])
-      tot_graph.SetLineWidth(len(INPUTFILES)-i_gr)
-      tot_graph.SetMarkerSize(1.3)
-      if i_gr == 0 :
-        tot_graph.SetMaximum(1.5)
-        tot_graph.SetLabelSize(0.07)
-        if label == "effic_eta":
-          tot_graph.GetYaxis().SetTitle("Tracksters Efficiency")
-        elif label == "purity_eta":
-          tot_graph.GetYaxis().SetTitle("Tracksters Purity")
-        elif label == "duplicate_eta":
-          tot_graph.GetYaxis().SetTitle("Tracksters Duplicate Rate")
-        elif label == "fake_eta":
-          tot_graph.GetYaxis().SetTitle("Tracksters Fake Rate")
-        elif label == "merge_eta":
-          tot_graph.GetYaxis().SetTitle("Tracksters Merge Rate")
-        tot_graph.GetYaxis().SetTitleOffset(0.8)
-        tot_graph.Draw("P0")
-      else :
-        tot_graph.Draw("P0same")
+  GRAPHS = []
+  NPOINTS = []
+  for label_iter in LABELS_EN :
+    graph_iter = TH1F(label_iter, label_iter, len(FULL_ITERS), 0., len(FULL_ITERS))
+    GRAPHS.append(graph_iter)
+    NPOINTS.append(0)
 
-      inputTFile.Close()
+  if VERBOSE: print("  Input files:")
+  for i_en in range(0, len(LABELS_EN)):
+    if VERBOSE: print(("  %s"%(INPUTFILES[i_en])))
+    inputTFile = TFile(INPUTFILES[i_en], "r")
+    if inputTFile.IsZombie(): continue
+    ipoint = 0
+    for i_iter in range(0, len(FULL_ITERS)) :
+      histofullname = HISTOPREFIX+'/'+FULL_ITERS[i_iter]+'/TSToCP_linking/'+histoname
+      graph = inputTFile.Get(histofullname)
+      for ibin in range(0,graph.GetNbinsX()) :
+        if graph.GetXaxis().GetBinLabel(ibin) == label:
+          GRAPHS[i_en].SetBinContent(i_iter+1, graph.GetBinContent(ibin))
+          GRAPHS[i_en].SetBinError(i_iter+1, graph.GetBinError(ibin))
+          GRAPHS[i_en].GetXaxis().SetBinLabel(i_iter+1,"%s" % LABELS_ITERS[i_iter] )
+        else :
+          continue
 
-      leg.AddEntry(tot_graph, LABELS[i_gr], "PL")
+  for i_gr in range(0, len(LABELS_EN)):
+    GRAPHS[i_gr].SetBarWidth(2/(len(LABELS_EN)+1)*(i_gr+1))
+    GRAPHS[i_gr].SetMarkerStyle(MARKERS_EN[i_gr])
+    GRAPHS[i_gr].SetMarkerColor(COLORS_EN[i_gr])
+    GRAPHS[i_gr].SetLineWidth(len(INPUTFILES)-i_gr)
+    GRAPHS[i_gr].SetLineColor(COLORS_EN[i_gr])
+    GRAPHS[i_gr].SetLineStyle(MARKERS_EN[i_gr])
+    GRAPHS[i_gr].SetMarkerSize(1.3)
+    if i_gr == 0 :
+      GRAPHS[i_gr].SetMaximum(1.5)
+      GRAPHS[i_gr].SetMinimum(0.0)
+      GRAPHS[i_gr].SetLabelSize(0.07)
+      GRAPHS[i_gr].GetYaxis().SetLabelSize(0.05)
+      GRAPHS[i_gr].GetXaxis().SetLabelSize(0.05)
+      GRAPHS[i_gr].GetYaxis().SetTitleSize(0.07)
+      GRAPHS[i_gr].GetXaxis().SetTitleSize(0.07)
+      if label == "effic_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Efficiency")
+      elif label == "purity_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Purity")
+      elif label == "duplicate_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Duplicate Rate")
+      elif label == "fake_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Fake Rate")
+      elif label == "merge_eta":
+        GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Merge Rate")
+      GRAPHS[i_gr].GetYaxis().SetTitleOffset(0.8)
+      GRAPHS[i_gr].GetXaxis().SetTitleOffset(0.9)
+      GRAPHS[i_gr].SetStats(0);
 
-    gPad.Update()
-    leg.Draw("same")
+      GRAPHS[i_gr].Draw("PE")
+    else :
+      GRAPHS[i_gr].Draw("PEsame")
 
-    if LABEL_ITERS[-1] == "Merge":
-      vert = TLine(len(FULL_ITERS)-1, gPad.GetUymin(), len(FULL_ITERS)-1, gPad.GetUymax())
-      vert.Draw()
+    leg.AddEntry(GRAPHS[i_gr], LABELS_EN[i_gr], "P")
 
-    CMS_lumi.CMS_lumi(c, iPeriod, iPos)
+  leg.Draw("same")
 
-    c.Draw()
-    nameOutputPlot = OUTPUTFOLDER+HISTONAMES[i_histo]+"_"+label
-    c.SaveAs(nameOutputPlot+".eps","eps")
-    c.SaveAs(nameOutputPlot+".png","png")
+  if LABELS_ITERS[-1] == "Merge":
+    vert = TLine(len(FULL_ITERS)-1, gPad.GetUymin(), len(FULL_ITERS)-1, gPad.GetUymax())
+    vert.Draw()
 
+  #CMS_lumi.CMS_lumi(c, iPeriod, iPos)
+
+  c.Draw()
+  nameOutputPlot = OUTPUTFOLDER+histoname+"_"+label+"_vsIter"
+  c.SaveAs(nameOutputPlot+".eps","eps")
+  c.SaveAs(nameOutputPlot+".png","png")
 
   return
 
 if __name__ == "__main__":
   labels = ["effic_eta", "purity_eta", "duplicate_eta", "fake_eta", "merge_eta"]
   for lab in labels:
-    singlePlot(lab)
+    plotDifferentIters(lab)
+    plotVersusEnergy(lab)
