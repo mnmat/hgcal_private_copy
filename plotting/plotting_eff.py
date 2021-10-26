@@ -5,7 +5,7 @@
 import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
-from ROOT import gROOT, TFile, TCanvas, TGraph, TH1F, TLegend, gPad, TLatex, TLine
+from ROOT import gROOT, TFile, TCanvas, TGraphErrors, TH1F, TLegend, gPad, TLatex, TLine
 import json, array
 import argparse
 
@@ -120,7 +120,7 @@ def plotVersusEnergy(label):
   GRAPHS = []
   NPOINTS = []
   for label_iter in LABELS_ITERS :
-    graph_iter = TGraph()
+    graph_iter = TGraphErrors()
     graph_iter.SetName(label_iter)
     GRAPHS.append(graph_iter)
     NPOINTS.append(0)
@@ -140,6 +140,7 @@ def plotVersusEnergy(label):
       for ibin in range(0,graph.GetNbinsX()) :
         if graph.GetXaxis().GetBinLabel(ibin) == label:
           GRAPHS[i_iter].SetPoint(NPOINTS[i_iter], energy, graph.GetBinContent(ibin))
+          GRAPHS[i_iter].SetPointError(NPOINTS[i_iter], 0.0, graph.GetBinError(ibin))
           NPOINTS[i_iter] = NPOINTS[i_iter] + 1
         else :
           continue
@@ -273,11 +274,10 @@ def plotDifferentIters(label):
         GRAPHS[i_gr].GetYaxis().SetTitle("Tracksters Merge Rate")
       GRAPHS[i_gr].GetYaxis().SetTitleOffset(0.8)
       GRAPHS[i_gr].GetXaxis().SetTitleOffset(0.9)
-      GRAPHS[i_gr].SetStats(0);
 
-      GRAPHS[i_gr].Draw("PE")
+      GRAPHS[i_gr].Draw("PE0")
     else :
-      GRAPHS[i_gr].Draw("PEsame")
+      GRAPHS[i_gr].Draw("PE0same")
 
     leg.AddEntry(GRAPHS[i_gr], LABELS_EN[i_gr], "P")
 
