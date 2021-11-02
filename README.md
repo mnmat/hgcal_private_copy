@@ -19,7 +19,7 @@ python run_singlestep.py -h
 
 ## Plotting
 
-`python3` is necessary: `which root` and then `source PATH/TO/FOLDER/bin/root/thisroot.sh`
+`python3` is necessary: `which root` and then `source PATH/TO/FOLDER/bin/thisroot.sh`
 
 Check how to run the plotting of each performance (eff and energy) with:
 ```

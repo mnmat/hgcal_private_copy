@@ -60,12 +60,9 @@ for i in args.iters:
   MARKERS_ITERS.append(int(iter_name[3]))
 
 GRAPHS = []
-x1 = []
-y1 = []
 
 # From https://twiki.cern.ch/twiki/pub/CMS/Internal/FigGuidelines/myMacro.py.txt
 import CMS_lumi, tdrstyle
-import array
 
 #set the tdr style
 tdrstyle.setTDRStyle() # this changes too many things
@@ -109,10 +106,10 @@ def plotVersusEnergy(label):
   c.SetTickx(0)
   c.SetTicky(0)
   c.SetGrid()
-  gROOT.SetBatch(True);
+  if not VERBOSE : gROOT.SetBatch(True);
 
   gPad.Update()
-  leg = TLegend(0.40,0.70,0.95,0.90)
+  leg = TLegend(0.60,0.70,0.95,0.90)
   leg.SetNColumns(round(len(LABELS_ITERS)/2))
   leg.SetTextSize(0.03)
   leg.SetHeader(SAMPLE)
@@ -183,7 +180,7 @@ def plotVersusEnergy(label):
   gPad.Update()
   leg.Draw("same")
 
-  #CMS_lumi.CMS_lumi(c, iPeriod, iPos)
+  CMS_lumi.CMS_lumi(c, iPeriod, iPos)
 
   c.Draw()
   nameOutputPlot = OUTPUTFOLDER+histoname+"_"+label+"_vsEnergy"
@@ -214,13 +211,13 @@ def plotDifferentIters(label):
   c.SetTicky(0)
 
   c.SetGrid()
-  gROOT.SetBatch(True);
+  if not VERBOSE : gROOT.SetBatch(True);
 
   gPad.Update()
-  leg = TLegend(0.40,0.70,0.95,0.90)
+  leg = TLegend(0.60,0.70,0.95,0.90)
   leg.SetTextSize(0.03)
   leg.SetHeader(SAMPLE)
-  leg.SetNColumns(round(len(LABELS_ITERS)/2))
+  leg.SetNColumns(round(len(LABELS_EN)/2))
 
   GRAPHS = []
   NPOINTS = []
@@ -247,7 +244,9 @@ def plotDifferentIters(label):
           continue
 
   for i_gr in range(0, len(LABELS_EN)):
-    GRAPHS[i_gr].SetBarWidth(2/(len(LABELS_EN)+1)*(i_gr+1))
+    offset = - 0.5 + 1/(len(LABELS_EN)+1)*(i_gr+1)
+    print(offset)
+    GRAPHS[i_gr].SetBarOffset(offset)
     GRAPHS[i_gr].SetMarkerStyle(MARKERS_EN[i_gr])
     GRAPHS[i_gr].SetMarkerColor(COLORS_EN[i_gr])
     GRAPHS[i_gr].SetLineWidth(len(INPUTFILES)-i_gr)
@@ -287,7 +286,7 @@ def plotDifferentIters(label):
     vert = TLine(len(FULL_ITERS)-1, gPad.GetUymin(), len(FULL_ITERS)-1, gPad.GetUymax())
     vert.Draw()
 
-  #CMS_lumi.CMS_lumi(c, iPeriod, iPos)
+  CMS_lumi.CMS_lumi(c, iPeriod, iPos)
 
   c.Draw()
   nameOutputPlot = OUTPUTFOLDER+histoname+"_"+label+"_vsIter"

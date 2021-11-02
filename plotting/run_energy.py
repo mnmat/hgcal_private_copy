@@ -1,44 +1,50 @@
 import os
 from collections import OrderedDict
+import argparse
 
+parser = argparse.ArgumentParser(description='Run step1, 2, 3 or 4 on several samples')
+parser.add_argument('--test', help='Print out the command only', action='store_true')
+parser.add_argument('-v', '--verbose', help="increase output verbosity", action="store_true")
+args = parser.parse_args()
 
-#SAMPLE_LABEL = ["Single #gamma", "Single #pi^{#pm}", "Single e^{#pm}", "Single K^{0}_{L}"]
-#SAMPLE_FILE = ["singlephoton", "singlepi", "singleel", "singleKaonL"]
-SAMPLE_LABEL = ["Single #gamma"]
-SAMPLE_FILE = ["singlephoton"]
+VERBOSE = args.verbose
+TEST = args.test
+
+SAMPLE_LABEL = ["\"Single-#gamma, PU = 0\"", "\"Single-#pi^{#pm}, PU = 0\"", "\"Single-e^{#pm}, PU = 0\"", "\"Single-K^{0}_{L}, PU = 0\""]
+SAMPLES = ["singlephoton", "singlepi", "singleel", "singleKaonL"]
 GENPRODUCER = {'singlephoton':"closeBy", 'singlepi':"flatEGun", 'singleel':"flatEGun", 'singleKaonL':"closeBy"}
 
-RELEASE_TAG = ["vanilla"]
+RELEASE_TAG = ["clue3D"]
 
-ITERS = ["TrkEM", "EM", "Trk", "HAD"]
+energies_features = [[10,94,20], [20,51,5], [50,54,26], [100,64,22], [200,99,3], [300,57,23]]
+EN_FEATURES = ' '.join("\""+str(key[0])+" GeV:"+str(key[1])+":"+str(key[2])+"\"" for key in energies_features)
 
-energies_features = OrderedDict([#("10",91), 
-                                 ("50",94), ("100",64), ("200",57), ("300",52)])
-FEATURES = ' '.join("\"E = "+key+" GeV:"+str(energies_features[key])+":21\"" for key in energies_features)
+iter_features = [["Merge","Merge",94,20], ["CLUE3DHigh","CLUE3DHigh",51,5], ["CLUE3DLow","CLUE3DLow",54,26], ["TrkEM","TrkEM",64,22], ["EM","EM",99,3], ["TrkHAD","Trk",57,23], ["HAD","HAD", 30,4]]
+ITER_FEATURES = ' '.join("\""+str(key[0])+":ticlTracksters"+str(key[1])+":"+str(key[2])+":"+str(key[3])+"\"" for key in iter_features)
 
 for tag in RELEASE_TAG :
   PATHFILESIN = "/data2/user/ebrondol/HGCal/production/CMSSW_12_1_0_pre4/"+tag+"/"
-  for i_label,i_sample in zip(SAMPLE_LABEL,SAMPLE_FILE):
+  for i_label,i_sample in zip(SAMPLE_LABEL,SAMPLES):
     inputFolder = "{}/{}_{}_hgcalCenter/step4/".format(PATHFILESIN, i_sample, GENPRODUCER[i_sample])
-    FILENAMES = ["DQM_V0001_R000000001__step4_"+i_sample+"__e"+key+"GeV__nopu.root" for key in energies_features]
+    FILENAMES = ["DQM_V0001_R000000001__step4_"+i_sample+"__e"+str(key[0])+"GeV__nopu.root" for key in energies_features]
 
     listFilein = ""
     for filein in FILENAMES:
       listFilein = listFilein + inputFolder + filein + " "
 
-    for i_iter in ITERS :
-      PATHFILESOUT = tag+"/"+i_sample+"_"+i_iter+"/"
-      if not os.path.exists(PATHFILESOUT):
-        os.makedirs(PATHFILESOUT)
+    PATHFILESOUT = tag+"/"+i_sample+"/"
+    if not os.path.exists(PATHFILESOUT):
+      os.makedirs(PATHFILESOUT)
   
-      HISTOPREFIX = "\"DQMData/Run 1/HGCAL/Run summary/HGCalValidator/ticlTracksters"+i_iter+"/\""
-      HISTONAMES = "\"trackster_energy\""
-      AXISTITLES = "\";Regressed Energy;#Tracksters\""
-      #AXISTITLES = "\";Raw Energy;#Tracksters\""
+    HISTONAMES = "\"trackster_energy\""
+    AXISTITLES = "\";Regressed Energy;#Tracksters\""
+    #AXISTITLES = "\";Raw Energy;#Tracksters\""
  
-      final_label = "\"" + i_label + ", " + i_iter + " iter only"  + "\""
-      command_plot = "python3 plotting_energy.py --filesin %s --folderout %s --histoprefix %s --histonames %s --varAxes %s --sample %s --features %s -v"%(listFilein,PATHFILESOUT,HISTOPREFIX,HISTONAMES,AXISTITLES,final_label,FEATURES)
-  
+    command_plot = "python3 plotting_energy.py --filesin %s --folderout %s --histonames %s --varAxes %s --sample %s --features %s --iter %s"%(listFilein,PATHFILESOUT,HISTONAMES,AXISTITLES,i_label,EN_FEATURES, ITER_FEATURES)
+    if VERBOSE or TEST:
+      command_plot = command_plot + " -v"
       print(command_plot)
-      os.system(command_plot)
+
+    if not TEST:
+        os.system(command_plot)
 
