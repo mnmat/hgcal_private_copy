@@ -5,8 +5,9 @@ import ROOT
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 from ROOT import gROOT, TFile, TCanvas, TGraph, TGraphErrors, TH1F, TLegend, gPad, TLatex, TLine
-import json, array, math
+import json, array, os
 import argparse
+import lib_plotting
 
 # From https://twiki.cern.ch/twiki/pub/CMS/Internal/FigGuidelines/myMacro.py.txt
 import CMS_lumi, tdrstyle
@@ -21,12 +22,12 @@ tdrstyle.setTDRStyle() # this changes too many things
 CMS_lumi.lumi_7TeV = "4.8 fb^{-1}"
 CMS_lumi.lumi_8TeV = "18.3 fb^{-1}"
 CMS_lumi.writeExtraText = 1
-CMS_lumi.extraText = "HGCal Testbeam Preliminary"
+CMS_lumi.extraText = "HGCAL Testbeam Preliminary"
 CMS_lumi.lumi_sqrtS = "" # used with iPeriod = 0, e.g. for simulation-only plots (default is an empty string)
 
 iPos = 50
 if (iPos == 0): CMS_lumi.relPosX = 0.12
-CMS_lumi.relPosX = 0.50
+CMS_lumi.relPosX = 0.45
 
 H_ref = 600;
 W_ref = 800;
@@ -45,42 +46,91 @@ topSize = 0.7
 bottomSize = 0.3
 bottomOffset = 0.
 
-def fillPlotError(x, y, err):
+def plotResolution():
+  CMS_lumi.relPosY = 0.10
+  c = TCanvas("c2","c2",50,50,W,H)
+  c.SetFillColor(0)
+  c.SetBorderMode(0)
+  c.SetFrameFillStyle(0)
+  c.SetFrameBorderMode(0)
+  c.SetLeftMargin( L/W )
+  c.SetRightMargin( R/W )
+  c.SetTopMargin( T/H )
+  c.SetBottomMargin( B/H )
+  c.SetTickx(0)
+  c.SetTicky(0)
+  leg = TLegend(0.51,0.50,0.9,0.73)
+  leg.SetHeader("Positron beam")
+  leg.SetTextSize(0.03 / topSize)
+  energy = [
+  20.746611306001526,
+  30.428540039247466,
+  50.19699506754658,
+  80.06409916428629,
+  99.89809293621147,
+  119.71788033307325,
+  149.1563307395649,
+  197.218960017578, 
+  243.3074714167734,
+  286.65926672374474]
+  reso_values_recable = [
+  0.04947379586764963,
+  0.040723293909064054,
+  0.032974000439450535,
+  0.027416977944129173,
+  0.02610686603577734,
+  0.02340097777744104,
+  0.020728730215254995,
+  0.017882056780039852,
+  0.016078301750983084,
+  0.015392190660918452
+  ]
 
-  graph = TGraphErrors()
-  NPOINTS = 0
-  for (ix, iy, iey) in zip(x, y, err):            
-    graph.SetPoint(NPOINTS, ix, iy)
-    graph.SetPointError(NPOINTS, 0, iey)
-    NPOINTS = NPOINTS + 1
+  #Fill empty
+  reso_errors_recable = [  0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0, 0.0, 0.0]
 
-  return graph
+  g_reso_recable = lib_plotting.fillPlotError(energy, reso_values_recable, reso_errors_recable)
+  g_reso_recable.GetYaxis().SetTitle("#sigma_{E}/E")
+  g_reso_recable.GetXaxis().SetTitle("Beam Energy [GeV]")
+  g_reso_recable.GetXaxis().SetTitleOffset( 1.00 )
+  g_reso_recable.GetYaxis().SetLabelSize( 0.04 / topSize )
+  g_reso_recable.GetYaxis().SetNdivisions(505);
+#  g_reso_recable.SetMinimum(-0.04)
+#  g_reso_recable.SetMaximum(0.)
+  g_reso_recable.SetMarkerSize(1.5)
+  g_reso_recable.SetMarkerColor(ROOT.kGreen+2)
+  g_reso_recable.SetLineColor(ROOT.kGreen+2)
+  g_reso_recable.SetLineWidth(2)
+  g_reso_recable.SetMarkerStyle(21)
+  g_reso_recable.Draw("APL")
 
-def fillPlotRatio(x, y1, y2, err1, err2):
+  #reso, CLUE clusterised
+  reso_values_CLUE = reso_values_recable
+  #Fill empty
+  reso_errors_CLUE = [  0.0, 0.0, 0.0, 0.0, 0.0,
+  0.0, 0.0, 0.0, 0.0, 0.0]
+  g_reso_CLUE = lib_plotting.fillPlotError(energy, reso_values_CLUE, reso_errors_CLUE)
+  g_reso_CLUE.SetMarkerSize(1.5)
+  g_reso_CLUE.SetMarkerStyle(22)
+  g_reso_CLUE.SetLineWidth(2)
+  g_reso_CLUE.SetMarkerColor(ROOT.kOrange-4)
+  g_reso_CLUE.SetLineColor(ROOT.kOrange-4)
+  g_reso_CLUE.Draw("PL")
 
-  graph = TGraphErrors()
-  NPOINTS = 0
-  for (ix, iy1, iy2, ierr1, ierr2) in zip(x, y1, y2, err1, err2): 
-    graph.SetPoint(NPOINTS, ix, iy1/iy2)
-    ierr = math.sqrt(ierr1*ierr1 + ierr2*ierr2)
-    graph.SetPointError(NPOINTS, 0, ierr*iy1/iy2)
-    NPOINTS = NPOINTS + 1
+  leg.AddEntry(g_reso_recable, "Reconstructable Hits", "P")
+  leg.AddEntry(g_reso_CLUE, "Clustered Hits", "P")
+  leg.Draw("same")
 
-  return graph
+  CMS_lumi.CMS_lumi(c, iPeriod, iPos)
 
-def fillPlotDifference(x, y1, y2, err1, err2):
-
-  graph = TGraphErrors()
-  NPOINTS = 0
-  for (ix, iy1, iy2, ierr1, ierr2) in zip(x, y1, y2, err1, err2): 
-    graph.SetPoint(NPOINTS, ix, iy1-iy2)
-    ierr = math.sqrt(ierr1*ierr1 + ierr2*ierr2)
-    graph.SetPointError(NPOINTS, 0, ierr*iy1/iy2)
-    NPOINTS = NPOINTS + 1
-
-  return graph
+  c.Update()
+  c.Draw()
+  lib_plotting.savePlot(c, "ACAT2021/plotTestBeam_reso")
+  return
 
 def plotResponse():
+  CMS_lumi.relPosY = 0.25
 #  ROOT.gStyle.SetOptStat(0)
 #  gROOT.SetBatch(False);
   c = TCanvas("c2","c2",50,50,W,H)
@@ -106,7 +156,8 @@ def plotResponse():
   c.SetTickx(0)
   c.SetTicky(0)
 
-  leg = TLegend(0.60,0.45,0.9,0.70)
+  leg = TLegend(0.51,0.30,0.9,0.53)
+  leg.SetHeader("Positron beam")
   leg.SetTextSize(0.03 / topSize)
 
   #data, reconstructable
@@ -136,8 +187,8 @@ def plotResponse():
   data_errors_recable = [  0.0, 0.0, 0.0, 0.0, 0.0,
   0.0, 0.0, 0.0, 0.0, 0.0]
 
-  g_data_recable = fillPlotError(energy, data_values_recable, data_errors_recable)
-  g_data_recable.GetYaxis().SetTitle("(E_{RECO}/E_{TRUE} - 1)")
+  g_data_recable = lib_plotting.fillPlotError(energy, data_values_recable, data_errors_recable)
+  g_data_recable.GetYaxis().SetTitle("(E_{ALL}/E_{BEAM} - 1)")
   g_data_recable.GetYaxis().SetLabelSize( 0.04 / topSize )
   g_data_recable.GetYaxis().SetNdivisions(505);
   g_data_recable.SetMinimum(-0.04)
@@ -164,7 +215,7 @@ def plotResponse():
   #Fill empty
   data_errors_CLUE = [  0.0, 0.0, 0.0, 0.0, 0.0,
   0.0, 0.0, 0.0, 0.0, 0.0]
-  g_data_CLUE = fillPlotError(energy, data_values_CLUE, data_errors_CLUE)
+  g_data_CLUE = lib_plotting.fillPlotError(energy, data_values_CLUE, data_errors_CLUE)
   g_data_CLUE.SetMarkerSize(1.5)
   g_data_CLUE.SetMarkerStyle(22)
   g_data_CLUE.SetLineWidth(2)
@@ -172,13 +223,13 @@ def plotResponse():
   g_data_CLUE.SetLineColor(ROOT.kOrange-4) 
   g_data_CLUE.Draw("PL")
 
-  leg.AddEntry(g_data_recable, "Reconstructable", "P")
-  leg.AddEntry(g_data_CLUE, "Clusterized Hits", "P")
+  leg.AddEntry(g_data_recable, "Reconstructable Hits", "P")
+  leg.AddEntry(g_data_CLUE, "Clustered Hits", "P")
   leg.Draw("same")
 
   p2.cd();
   if difference : 
-    data_difference = fillPlotDifference(energy, data_values_recable, data_values_CLUE, data_errors_recable, data_errors_CLUE) 
+    data_difference = lib_plotting.fillPlotDifference(energy, data_values_recable, data_values_CLUE, data_errors_recable, data_errors_CLUE) 
     data_difference.GetYaxis().SetTitle("Difference")
     data_difference.GetXaxis().SetTitle("Beam Energy [GeV]")
     data_difference.SetMinimum(-0.01)
@@ -194,13 +245,15 @@ def plotResponse():
     data_difference.SetMarkerColor(ROOT.kBlack)
     data_difference.SetLineColor(ROOT.kBlack)
     data_difference.SetLineWidth(2)
-    data_difference.Draw("AP");
+    data_difference.GetHistogram().Draw("AXIS");
     c.Update()
     line = ROOT.TLine(p2.GetUxmin(), 0., p2.GetUxmax(), 0.)
-    line.SetLineColor(ROOT.kGray+2)
+    line.SetLineStyle(2)
+    line.SetLineColor(ROOT.kGray+1)
     line.Draw("same")
+    data_difference.Draw("P");
   if ratio : 
-    data_ratio = fillPlotRatio(energy, data_values_recable, data_values_CLUE, data_errors_recable, data_errors_CLUE) 
+    data_ratio = lib_plotting.fillPlotRatio(energy, data_values_recable, data_values_CLUE, data_errors_recable, data_errors_CLUE) 
     data_ratio.GetYaxis().SetTitle("Ratio")
     data_ratio.GetXaxis().SetTitle("Beam Energy [GeV]")
     data_ratio.SetMinimum(0.5)
@@ -216,21 +269,21 @@ def plotResponse():
     data_ratio.SetMarkerColor(ROOT.kBlack)
     data_ratio.SetLineColor(ROOT.kBlack)
     data_ratio.SetLineWidth(2)
-    data_difference.Draw("AP");
+    data_difference.GetHistogram().Draw("AXIS");
     c.Update()
     line = ROOT.TLine(p2.GetUxmin(), 1., p2.GetUxmax(), 1.)
-    line.SetLineColor(ROOT.kGray+2)
+    line.SetLineStyle(2)
+    line.SetLineColor(ROOT.kGray+1)
     line.Draw("same")
+    data_difference.Draw("P");
 
   CMS_lumi.CMS_lumi(c, iPeriod, iPos)
 
   c.Update()
   c.Draw()
-  # ERICA: why the png looks so bad??
-  c.SaveAs("plotTestBeam.png", "png")
-  c.SaveAs("plotTestBeam.eps", "eps")
-  c.SaveAs("plotTestBeam.C", "C")
+  lib_plotting.savePlot(c, "ACAT2021/plotTestBeam")
   return
 
 if __name__ == "__main__":
   plotResponse()
+  plotResolution()
