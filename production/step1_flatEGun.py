@@ -17,6 +17,8 @@ if "pi" in nameprefix :
   part_id = 211
 elif "el" in nameprefix :
   part_id = 11
+elif "mu" in nameprefix :
+  part_id = 13
 else:
   print('no part id valid')
   sys.exit() 
@@ -34,9 +36,9 @@ if not os.path.exists(outfolder):
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
 outfile_  = "file:{}/step1_{}_e{}GeV_nopu.root".format(outfolder, nameprefix, en_str)
 
-from Configuration.Eras.Era_Phase2C9_cff import Phase2C9
+from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
 
-process = cms.Process('SIM',Phase2C9)
+process = cms.Process('SIM',Phase2C17I13M9)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -44,8 +46,8 @@ process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D49Reco_cff')
-process.load('Configuration.Geometry.GeometryExtended2026D49_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D86_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
 process.load('IOMC.EventVertexGenerators.VtxSmearedHLLHC_cfi')
@@ -123,10 +125,10 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T15', ''
 process.generator = cms.EDProducer("FlatRandomEGunProducer",
     AddAntiParticle = cms.bool(False),
     PGunParameters = cms.PSet(
-        MaxEta = cms.double(2.7),
+        MaxEta = cms.double(2.04001),
         MaxPhi = cms.double(3.14159265359),
         MaxE = cms.double(en_max),
-        MinEta = cms.double(1.7),
+        MinEta = cms.double(2.03999),
         MinPhi = cms.double(-3.14159265359),
         MinE = cms.double(en_min),
         PartID = cms.vint32(int(part_id))

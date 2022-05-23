@@ -5,9 +5,9 @@
 # with command line options: step2 --conditions auto:phase2_realistic_T15 -s DIGI:pdigi_valid,L1TrackTrigger,L1,DIGI2RAW,HLT:@fake2 --datatier GEN-SIM-DIGI-RAW -n 10 --geometry Extended2026D49 --era Phase2C9 --eventcontent FEVTDEBUGHLT --no_exec --filein file:step1.root --fileout file:step2.root
 import FWCore.ParameterSet.Config as cms
 
-from Configuration.Eras.Era_Phase2C9_cff import Phase2C9
+from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
 
-process = cms.Process('HLT',Phase2C9)
+process = cms.Process('HLT',Phase2C17I13M9)
 
 import sys
 import os, errno
@@ -34,7 +34,7 @@ process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D49Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.Digi_cff')
 process.load('Configuration.StandardSequences.L1TrackTrigger_cff')
@@ -127,7 +127,7 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
 # Other statements
 process.mix.digitizers = cms.PSet(process.theDigitizersValid)
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T15', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T21', '')
 
 # Path and EndPath definitions
 process.digitisation_step = cms.Path(process.pdigi_valid)
@@ -138,8 +138,12 @@ process.endjob_step = cms.EndPath(process.endOfProcess)
 process.FEVTDEBUGHLToutput_step = cms.EndPath(process.FEVTDEBUGHLToutput)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.digitisation_step,process.L1TrackTrigger_step,process.L1simulation_step,process.digi2raw_step)
-process.schedule.extend(process.HLTSchedule)
+# process.schedule imported from cff in HLTrigger.Configuration
+process.schedule.insert(0, process.digitisation_step)
+process.schedule.insert(1, process.L1TrackTrigger_step)
+process.schedule.insert(2, process.L1simulation_step)
+process.schedule.insert(3, process.digi2raw_step)
+
 process.schedule.extend([process.endjob_step,process.FEVTDEBUGHLToutput_step])
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
