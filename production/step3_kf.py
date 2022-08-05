@@ -6,8 +6,9 @@
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
+from Configuration.ProcessModifiers.kf_cff import kf
 
-process = cms.Process('RECO',Phase2C17I13M9)
+process = cms.Process('RECO',Phase2C17I13M9,kf)
 
 import sys
 import os, errno
@@ -59,6 +60,8 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(infile_),
     secondaryFileNames = cms.untracked.vstring()
 )
+
+print("KF")
 
 process.options = cms.untracked.PSet(
     FailPath = cms.untracked.vstring(),

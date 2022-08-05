@@ -11,7 +11,13 @@ en_str = sys.argv[2]
 en = float(en_str)
 en_min = float(en-0.01)
 en_max = float(en+0.01)
-nameprefix = sys.argv[3]
+nameprefix = sys.argv[4]
+
+eta_str = sys.argv[3]
+eta = float(eta_str)
+eta_min = eta - 0.00001
+eta_max = eta + 0.00001
+eta = eta_str.replace(".","")
 
 if "pi" in nameprefix :
   part_id = 211
@@ -25,7 +31,7 @@ else:
 
 print ("partId=", part_id, "en=", en, " nameprefix=", nameprefix)
 
-folder = sys.argv[4]
+folder = sys.argv[5]
 outfolder = folder + '/step1/'
 if not os.path.exists(outfolder):
    try:
@@ -34,7 +40,7 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step1_{}_e{}GeV_nopu.root".format(outfolder, nameprefix, en_str)
+outfile_  = "file:{}/step1_{}_e{}GeV_eta{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str)
 
 from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
 
@@ -125,11 +131,13 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T15', ''
 process.generator = cms.EDProducer("FlatRandomEGunProducer",
     AddAntiParticle = cms.bool(False),
     PGunParameters = cms.PSet(
-        MaxEta = cms.double(2.04001),
+        MaxEta = cms.double(eta_max),
         MaxPhi = cms.double(3.14159265359),
+	#MaxPhi = cms.double(2),
         MaxE = cms.double(en_max),
-        MinEta = cms.double(2.03999),
+        MinEta = cms.double(eta_min),
         MinPhi = cms.double(-3.14159265359),
+	#MinPhi = cms.double(1.2),
         MinE = cms.double(en_min),
         PartID = cms.vint32(int(part_id))
     ),

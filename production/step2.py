@@ -12,12 +12,13 @@ process = cms.Process('HLT',Phase2C17I13M9)
 import sys
 import os, errno
 en_str = sys.argv[2]
-nameprefix = sys.argv[3]
+eta_str = sys.argv[3].replace(".","")
+nameprefix = sys.argv[4]
 
-infolder = sys.argv[4]
-infile_  = "file:{}/step1/step1_{}_e{}GeV_nopu.root".format(infolder, nameprefix, en_str)
+infolder = sys.argv[5]
+infile_  = "file:{}/step1/step1_{}_e{}GeV_eta{}_nopu.root".format(infolder, nameprefix, en_str, eta_str)
 
-outfolder = sys.argv[5]
+outfolder = sys.argv[6]
 outfolder = outfolder + '/step2/'
 if not os.path.exists(outfolder):
    try:
@@ -26,7 +27,7 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step2_{}_e{}GeV_nopu.root".format(outfolder, nameprefix, en_str)
+outfile_  = "file:{}/step2_{}_e{}GeV_eta{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
