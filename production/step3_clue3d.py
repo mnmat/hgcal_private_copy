@@ -15,12 +15,14 @@ import os, errno
 en_str = sys.argv[2]
 eta_str = sys.argv[3].replace(".","")
 nameprefix = sys.argv[4]
+outfolder = sys.argv[8]
+nevents = sys.argv[5]
+caps = sys.argv[6]
+infolder = sys.argv[7]
 
-infolder = sys.argv[5]
-infile_  = "file:{}/step2/step2_{}_e{}GeV_eta{}_nopu.root".format(infolder, nameprefix, en_str, eta_str)
-
-outfolder = sys.argv[6]
+infile_  = "file:{}/step2/step2_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents)
 outfolder = outfolder + '/step3/'
+
 if not os.path.exists(outfolder):
    try:
       os.makedirs(outfolder)
@@ -28,7 +30,7 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step3_{}_e{}GeV_eta{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str)
+outfile_  = "file:{}/step3clue3D_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
 outfileDQM_ = outfile_.replace(".root","_inDQM.root")
 
 # import of standard configurations

@@ -11,15 +11,20 @@ process = cms.Process('HLT',Phase2C17I13M9)
 
 import sys
 import os, errno
+
+# Set input variables
+
 en_str = sys.argv[2]
 eta_str = sys.argv[3].replace(".","")
 nameprefix = sys.argv[4]
-
-infolder = sys.argv[5]
-infile_  = "file:{}/step1/step1_{}_e{}GeV_eta{}_nopu.root".format(infolder, nameprefix, en_str, eta_str)
-
-outfolder = sys.argv[6]
+nevents = sys.argv[5]
+caps = sys.argv[6]
+infolder = sys.argv[7]
+infile_  = "file:{}/step1/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents)
+outfolder = sys.argv[8]
+print("Outfolder: ", outfolder)
 outfolder = outfolder + '/step2/'
+
 if not os.path.exists(outfolder):
    try:
       os.makedirs(outfolder)
@@ -27,7 +32,7 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step2_{}_e{}GeV_eta{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str)
+outfile_  = "file:{}/step2_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -35,7 +40,7 @@ process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D99Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.Digi_cff')
 process.load('Configuration.StandardSequences.L1TrackTrigger_cff')

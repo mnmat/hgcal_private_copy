@@ -7,17 +7,15 @@
 import FWCore.ParameterSet.Config as cms
 
 import sys, os, errno
+
+# Set input variables
+
 en_str = sys.argv[2]
 en = float(en_str)
 en_min = float(en-0.01)
 en_max = float(en+0.01)
-nameprefix = sys.argv[4]
-
 eta_str = sys.argv[3]
-eta = float(eta_str)
-eta_min = eta - 0.00001
-eta_max = eta + 0.00001
-eta = eta_str.replace(".","")
+nameprefix = sys.argv[4]
 
 if "pi" in nameprefix :
   part_id = 211
@@ -29,9 +27,28 @@ else:
   print('no part id valid')
   sys.exit() 
 
-print ("partId=", part_id, "en=", en, " nameprefix=", nameprefix)
+nevents = sys.argv[5]
+caps = sys.argv[6]
 
-folder = sys.argv[5]
+if "_" in eta_str: # in case we want to specify an eta range, i.e. 1.7_2.7
+    eta_min = float(eta_str.split("_")[0])
+    eta_max = float(eta_str.split("_")[1])
+else:
+    eta = float(eta_str)
+    eta_min = eta - 0.00001
+    eta_max = eta + 0.00001
+
+    if caps == "neg": 
+        eta_min = - eta_min
+        eta_max = - eta_max
+    elif caps!="pos":
+        raise Exception('%s is an invalid keyword argument for the z position. Should be either "pos" or "neg".'%caps)
+
+eta_str = eta_str.replace(".","")
+
+print ("partId=", part_id, " en=", en," eta=",eta," nameprefix=", nameprefix)
+
+folder = sys.argv[7]
 outfolder = folder + '/step1/'
 if not os.path.exists(outfolder):
    try:
@@ -40,7 +57,7 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step1_{}_e{}GeV_eta{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str)
+outfile_  = "file:{}/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
 
 from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
 
@@ -52,8 +69,8 @@ process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
-process.load('Configuration.Geometry.GeometryExtended2026D86_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D99Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D99_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
 process.load('IOMC.EventVertexGenerators.VtxSmearedHLLHC_cfi')
@@ -63,7 +80,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(500),
+    input = cms.untracked.int32(int(nevents)),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
@@ -126,7 +143,7 @@ process.FEVTDEBUGoutput = cms.OutputModule("PoolOutputModule",
 # Other statements
 process.genstepfilter.triggerConditions=cms.vstring("generation_step")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T15', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T21', '')
 
 process.generator = cms.EDProducer("FlatRandomEGunProducer",
     AddAntiParticle = cms.bool(False),

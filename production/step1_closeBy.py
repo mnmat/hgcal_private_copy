@@ -7,18 +7,26 @@
 import FWCore.ParameterSet.Config as cms
 
 import sys, os, errno
+
+nevents = sys.argv[5]
+caps = sys.argv[6]
+
 en_str = sys.argv[2]
 en = float(en_str)
 en_min = float(en-0.01)
 en_max = float(en+0.01)
+nameprefix = sys.argv[4]
 
 eta_str = sys.argv[3]
 eta = float(eta_str)
+
+if caps =="neg": eta = -eta 
+elif caps!="pos":
+    raise Exception('%s is an invalid keyword argument for the z position. Should be either "pos" or "neg".'%caps)
+
 eta_min = eta - 0.00001
 eta_max = eta + 0.00001
-eta = eta_str.replace(".","")
-
-nameprefix = sys.argv[4]
+eta_str = eta_str.replace(".","")
 
 if "pho" in nameprefix :
   part_id = 22
@@ -30,7 +38,7 @@ else:
 
 print ("partId=", part_id, "en=", en, " nameprefix=", nameprefix)
 
-folder = sys.argv[5]
+folder = sys.argv[7]
 outfolder = folder + '/step1/'
 if not os.path.exists(outfolder):
    try:
@@ -39,7 +47,7 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step1_{}_e{}GeV_eta{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str)
+outfile_  = "file:{}/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
 
 from Configuration.Eras.Era_Phase2C9_cff import Phase2C9
 
@@ -62,7 +70,7 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(500),
+    input = cms.untracked.int32(nevents),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet)
 )
 
