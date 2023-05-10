@@ -1,0 +1,13 @@
+executable            = create_samples.sh
+arguments             = $(eta) $(energy) $(nevents) $(idx) step3
+universe              = vanilla
++JobFlavour = "workday"
+should_transfer_files = YES
+transfer_input_files  = run_singlestep.py, step3_kf.py, root://eosuser.cern.ch/$(infile)
+getenv                = true
+output                = condor/output/create_samples.$(eta).$(energy).out
+error                 = condor/error/create_samples.$(eta).$(energy).err
+log                   = condor/log/create_samples.$(eta).$(energy).log
+MY.XRDCP_CREATE_DIR = True
+
+queue eta, energy, nevents, idx, infile from tmp_step3.txt
