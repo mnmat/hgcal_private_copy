@@ -4,3 +4,15 @@ production/Eta_29/
 production/example/
 production/log/
 production/step3_inMINIAODSIM.root
+production/Isolation_Mu_Isolation.txt
+production/Isolation_Mu_Track_infolist.txt
+production/create_samples.py
+*.log
+production/mmatthew.cc
+production/mv.py
+production/segmentation_fault.sh
+*test*
+production/condor/
+dummy_file.txt
+alt_steps/
+production/errors.txt

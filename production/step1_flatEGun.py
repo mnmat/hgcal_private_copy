@@ -50,6 +50,10 @@ print ("partId=", part_id, " en=", en," eta=",eta," nameprefix=", nameprefix)
 
 folder = sys.argv[7]
 outfolder = folder + '/step1/'
+
+nthreads = int(sys.argv[8])
+idx = str(sys.argv[9])
+
 if not os.path.exists(outfolder):
    try:
       os.makedirs(outfolder)
@@ -57,7 +61,7 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
+outfile_  = "file:{}/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu_{}.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents,idx)
 
 from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
 
@@ -109,7 +113,7 @@ process.options = cms.untracked.PSet(
     numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(0),
     numberOfConcurrentRuns = cms.untracked.uint32(1),
     numberOfStreams = cms.untracked.uint32(0),
-    numberOfThreads = cms.untracked.uint32(1),
+    numberOfThreads = cms.untracked.uint32(nthreads),
     printDependencies = cms.untracked.bool(False),
     sizeOfStackForThreadsInKB = cms.optional.untracked.uint32,
     throwIfIllegalParameter = cms.untracked.bool(True),

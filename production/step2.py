@@ -20,10 +20,19 @@ nameprefix = sys.argv[4]
 nevents = sys.argv[5]
 caps = sys.argv[6]
 infolder = sys.argv[7]
-infile_  = "file:{}/step1/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents)
+nthreads = int(sys.argv[9])
+idx = str(sys.argv[10])
+
+if idx != "none":
+    infile_  = "file:{}/step1/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu_{}.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents,idx)
+else:
+    infile_  = "file:{}/step1/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents)
+
 outfolder = sys.argv[8]
 print("Outfolder: ", outfolder)
 outfolder = outfolder + '/step2/'
+
+
 
 if not os.path.exists(outfolder):
    try:
@@ -32,7 +41,11 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
-outfile_  = "file:{}/step2_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
+if idx != "-1":
+    outfile_  = "file:{}/step2_{}_e{}GeV_eta{}_z{}_events{}_nopu_{}.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents,idx)
+else:
+    outfile_  = "file:{}/step2_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
+
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -102,7 +115,7 @@ process.options = cms.untracked.PSet(
     numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(1),
     numberOfConcurrentRuns = cms.untracked.uint32(1),
     numberOfStreams = cms.untracked.uint32(0),
-    numberOfThreads = cms.untracked.uint32(1),
+    numberOfThreads = cms.untracked.uint32(nthreads),
     printDependencies = cms.untracked.bool(False),
     sizeOfStackForThreadsInKB = cms.optional.untracked.uint32,
     throwIfIllegalParameter = cms.untracked.bool(True),
