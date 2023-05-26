@@ -123,7 +123,7 @@ process.FEVTDEBUGHLTEventContent.outputCommands.append('drop *_*_*_*')
 process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_*_ticlRecHitFile_*')
 process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_ticlTrackstersKF_*_*')
 process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_mix_*_*')
-process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_HGCalRecHit_*_*')
+#process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_HGCalRecHit_*_*')
 
 # End
 
