@@ -29,7 +29,7 @@ Scrip[ts to run on multiple samples and energies in `run_*.py`
 
 ## HTCONDOR
 
-To use run_singlestep.py on htcondor, one can use the scripts found in the scripts/ folder. Note that the .sub files require a textfile called tmp_step*.txt with the input arguments eta, energy, number of events, and path to input file to run. Those files can be created with write_step_args.sh. To send jobs to the worker nodes do the following:
+To use run_singlestep.py on htcondor, one can use the scripts found in the scripts/ folder. Note that the .sub files require a textfile called tmp_step*.txt with the input arguments `eta`, `energy`, `number of events`, and `PATH/TO/FILE` to run. Those files can be created with `write_step_args.sh`. To send jobs to the worker nodes do the following:
 ```
 cmsenv
 cd scripts
