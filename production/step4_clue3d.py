@@ -6,20 +6,28 @@
 # with command line options: step4 --conditions auto:phase2_realistic_T15 -s HARVESTING:@phase2Validation+@phase2+@miniAODValidation+@miniAODDQM --scenario pp --filetype DQM --geometry Extended2026D49 --era Phase2C9 --mc -n 100 --no_exec --filein file:step3_inDQM.root --fileout file:step4.root
 import FWCore.ParameterSet.Config as cms
 
-from Configuration.Eras.Era_Phase2C9_cff import Phase2C9
-from Configuration.ProcessModifiers.clue3D_cff import clue3D
-
-process = cms.Process('HARVESTING',Phase2C9,clue3D)
-
 import sys
 import os, errno
-en_str = sys.argv[2]
-nameprefix = sys.argv[3]
-infolder = sys.argv[4]
-infile_  = "file:{}/step3/step3_{}_e{}GeV_nopu_inDQM.root".format(infolder, nameprefix, en_str)
 
-outfolder = sys.argv[5]
+# Get input variables
+en_str = sys.argv[2]
+eta_str = sys.argv[3].replace(".","")
+nameprefix = sys.argv[4]
+nevents = sys.argv[5]
+caps = sys.argv[6]
+infolder = sys.argv[7]
+outfolder = sys.argv[8]
+nthreads = int(sys.argv[9])
+idx = str(sys.argv[10])
+
+# Define input and output files
+if idx != "none":
+    infile_  = "file:{}/step3/step3_{}_e{}GeV_eta{}_z{}_events{}_nopu_{}.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents,idx)
+else:
+    infile_  = "file:{}/step3/step3_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents)
+
 outfolder = outfolder + '/step4/'
+
 if not os.path.exists(outfolder):
    try:
       os.makedirs(outfolder)
@@ -27,6 +35,19 @@ if not os.path.exists(outfolder):
       if e.errno != errno.EEXIST:
          raise
    #os.makedirs(outfolder, exist_ok=True) # only in Python 3
+if idx != "none":
+    outfile_  = "file:{}/step4_{}_e{}GeV_eta{}_z{}_events{}_nopu_{}.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents,idx)
+else:
+    outfile_  = "file:{}/step4_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
+
+
+outfileDQM_ = outfile_.replace(".root","_inDQM.root")
+
+
+from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
+from Configuration.ProcessModifiers.clue3D_cff import clue3D
+
+process = cms.Process('HARVESTING',Phase2C17I13M9,clue3D)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -34,7 +55,7 @@ process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D49Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D99Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.DQMSaverAtRunEnd_cff')
 process.load('Configuration.StandardSequences.Harvesting_cff')
@@ -96,7 +117,7 @@ process.configurationMetadata = cms.untracked.PSet(
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T15', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic_T21', '')
 
 # Path and EndPath definitions
 process.genHarvesting = cms.Path(process.postValidation_gen)

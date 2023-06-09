@@ -5,15 +5,10 @@
 # with command line options: step2 --conditions auto:phase2_realistic_T15 -s DIGI:pdigi_valid,L1TrackTrigger,L1,DIGI2RAW,HLT:@fake2 --datatier GEN-SIM-DIGI-RAW -n 10 --geometry Extended2026D49 --era Phase2C9 --eventcontent FEVTDEBUGHLT --no_exec --filein file:step1.root --fileout file:step2.root
 import FWCore.ParameterSet.Config as cms
 
-from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
-
-process = cms.Process('HLT',Phase2C17I13M9)
-
 import sys
 import os, errno
 
-# Set input variables
-
+# Get input variables
 en_str = sys.argv[2]
 eta_str = sys.argv[3].replace(".","")
 nameprefix = sys.argv[4]
@@ -23,6 +18,7 @@ infolder = sys.argv[7]
 nthreads = int(sys.argv[9])
 idx = str(sys.argv[10])
 
+# Define input and output files
 if idx != "none":
     infile_  = "file:{}/step1/step1_{}_e{}GeV_eta{}_z{}_events{}_nopu_{}.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents,idx)
 else:
@@ -31,8 +27,6 @@ else:
 outfolder = sys.argv[8]
 print("Outfolder: ", outfolder)
 outfolder = outfolder + '/step2/'
-
-
 
 if not os.path.exists(outfolder):
    try:
@@ -46,6 +40,11 @@ if idx != "-1":
 else:
     outfile_  = "file:{}/step2_{}_e{}GeV_eta{}_z{}_events{}_nopu.root".format(outfolder, nameprefix, en_str, eta_str,caps,nevents)
 
+
+
+from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
+
+process = cms.Process('HLT',Phase2C17I13M9)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')

@@ -8,14 +8,20 @@ import FWCore.ParameterSet.Config as cms
 
 import sys, os, errno
 
-# Set input variables
-
+# Get input variables
 en_str = sys.argv[2]
+eta_str = sys.argv[3]
+nameprefix = sys.argv[4]
+nevents = sys.argv[5]
+caps = sys.argv[6]
+folder = sys.argv[7]
+nthreads = int(sys.argv[8])
+idx = str(sys.argv[9])
+
+# Set variables for particle gun
 en = float(en_str)
 en_min = float(en-0.01)
 en_max = float(en+0.01)
-eta_str = sys.argv[3]
-nameprefix = sys.argv[4]
 
 if "pi" in nameprefix :
   part_id = 211
@@ -26,9 +32,6 @@ elif "mu" in nameprefix :
 else:
   print('no part id valid')
   sys.exit() 
-
-nevents = sys.argv[5]
-caps = sys.argv[6]
 
 if "_" in eta_str: # in case we want to specify an eta range, i.e. 1.7_2.7
     eta_min = float(eta_str.split("_")[0])
@@ -44,15 +47,11 @@ else:
     elif caps!="pos":
         raise Exception('%s is an invalid keyword argument for the z position. Should be either "pos" or "neg".'%caps)
 
-eta_str = eta_str.replace(".","")
-
 print ("partId=", part_id, " en=", en," eta=",eta," nameprefix=", nameprefix)
 
-folder = sys.argv[7]
+# Define output file
 outfolder = folder + '/step1/'
-
-nthreads = int(sys.argv[8])
-idx = str(sys.argv[9])
+eta_str = eta_str.replace(".","")
 
 if not os.path.exists(outfolder):
    try:

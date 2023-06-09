@@ -5,16 +5,10 @@
 # with command line options: step3 --conditions auto:phase2_realistic_T15 -s RAW2DIGI,L1Reco,RECO,RECOSIM,PAT,VALIDATION:@phase2Validation+@miniAODValidation,DQM:@phase2+@miniAODDQM --datatier GEN-SIM-RECO,MINIAODSIM,DQMIO -n 10 --geometry Extended2026D49 --era Phase2C9 --eventcontent FEVTDEBUGHLT,MINIAODSIM,DQM --no_exec --filein file:step2.root --fileout file:step3.root
 import FWCore.ParameterSet.Config as cms
 
-from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
-from Configuration.ProcessModifiers.hgcal_ticl_kf_cff import hgcal_ticl_kf
-
-process = cms.Process('RECO',Phase2C17I13M9,hgcal_ticl_kf)
-
 import sys
 import os, errno
 
-# Set input variables
-
+# Get input variables
 en_str = sys.argv[2]
 eta_str = sys.argv[3].replace(".","")
 nameprefix = sys.argv[4]
@@ -25,7 +19,7 @@ outfolder = sys.argv[8]
 nthreads = int(sys.argv[9])
 idx = str(sys.argv[10])
 
-print(idx)
+# Define input and output files
 if idx != "none":
     infile_  = "file:{}/step2/step2_{}_e{}GeV_eta{}_z{}_events{}_nopu_{}.root".format(infolder, nameprefix, en_str, eta_str,caps,nevents,idx)
 else:
@@ -47,6 +41,11 @@ else:
 
 
 outfileDQM_ = outfile_.replace(".root","_inDQM.root")
+
+from Configuration.Eras.Era_Phase2C17I13M9_cff import Phase2C17I13M9
+from Configuration.ProcessModifiers.hgcal_ticl_kf_cff import hgcal_ticl_kf
+
+process = cms.Process('RECO',Phase2C17I13M9,hgcal_ticl_kf)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -123,7 +122,7 @@ process.FEVTDEBUGHLTEventContent.outputCommands.append('drop *_*_*_*')
 process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_*_ticlRecHitFile_*')
 process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_ticlTrackstersKF_*_*')
 process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_mix_*_*')
-#process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_HGCalRecHit_*_*')
+process.FEVTDEBUGHLTEventContent.outputCommands.append('keep *_HGCalRecHit_*_*')
 
 # End
 
