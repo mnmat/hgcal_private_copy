@@ -1,0 +1,118 @@
+condor_exec.exe: line 22: cd: ../Samples/noPU: No such file or directory
+17-Apr-2024 01:14:40 CEST  Initiating request to open file file:/eos/cms/store/group/dpg_hgcal/comm_hgcal/mmatthew/PatternRecognitionByKalmanFilter/CMSSW_13_2_0_pre3/samples/0_PU/zpos/n100/Eta_23/singlemuon_flatEGun_hgcalCenter//step2/step2_singlemuon_e20GeV_eta23_zpos_events100_nopu_3.root
+17-Apr-2024 01:15:00 CEST  Successfully opened file file:/eos/cms/store/group/dpg_hgcal/comm_hgcal/mmatthew/PatternRecognitionByKalmanFilter/CMSSW_13_2_0_pre3/samples/0_PU/zpos/n100/Eta_23/singlemuon_flatEGun_hgcalCenter//step2/step2_singlemuon_e20GeV_eta23_zpos_events100_nopu_3.root
+2024-04-17 01:16:14.317234: I tensorflow/core/platform/cpu_feature_guard.cc:142] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  SSE4.1 SSE4.2 AVX AVX2 FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-04-17 01:16:14.318191: E tensorflow/stream_executor/cuda/cuda_driver.cc:271] failed call to cuInit: UNKNOWN ERROR (34)
+2024-04-17 01:16:14.318259: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (b7s03p1998.cern.ch): /proc/driver/nvidia/version does not exist
+Begin processing the 1st record. Run 1, Event 1, LumiSection 1 on stream 0 at 17-Apr-2024 01:20:45.201 CEST
+%MSG-w UndefinedPartonMode:  HadronAndPartonSelector:selectedHadronsAndPartons  17-Apr-2024 01:21:31 CEST Run: 1 Event: 1
+Could not automatically determine the hadronizer type and set the correct parton selection mode. Parton-based jet flavour will not be defined.
+%MSG
+%MSG-w UndefinedPartonMode:  HadronAndPartonSelector:patJetPartons  17-Apr-2024 01:21:31 CEST Run: 1 Event: 1
+Could not automatically determine the hadronizer type and set the correct parton selection mode. Parton-based jet flavour will not be defined.
+%MSG
+%MSG-w UndefinedPartonMode:   HadronAndPartonSelector:selectedHadronsAndPartonsForGenJetsFlavourInfos  17-Apr-2024 01:21:34 CEST Run: 1 Event: 1
+Could not automatically determine the hadronizer type and set the correct parton selection mode. Parton-based jet flavour will not be defined.
+%MSG
+Begin processing the 2nd record. Run 1, Event 2, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:39.112 CEST
+Begin processing the 3rd record. Run 1, Event 3, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:41.202 CEST
+Begin processing the 4th record. Run 1, Event 4, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:43.099 CEST
+Begin processing the 5th record. Run 1, Event 5, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:44.865 CEST
+Begin processing the 6th record. Run 1, Event 6, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:46.517 CEST
+Begin processing the 7th record. Run 1, Event 7, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:48.360 CEST
+Begin processing the 8th record. Run 1, Event 8, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:50.367 CEST
+Begin processing the 9th record. Run 1, Event 9, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:52.623 CEST
+Begin processing the 10th record. Run 1, Event 10, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:55.024 CEST
+Begin processing the 11th record. Run 1, Event 11, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:56.884 CEST
+Begin processing the 12th record. Run 1, Event 12, LumiSection 1 on stream 0 at 17-Apr-2024 01:21:58.989 CEST
+Begin processing the 13th record. Run 1, Event 13, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:01.240 CEST
+Begin processing the 14th record. Run 1, Event 14, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:03.187 CEST
+Begin processing the 15th record. Run 1, Event 15, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:05.148 CEST
+Begin processing the 16th record. Run 1, Event 16, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:07.176 CEST
+Begin processing the 17th record. Run 1, Event 17, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:08.966 CEST
+Begin processing the 18th record. Run 1, Event 18, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:10.908 CEST
+Begin processing the 19th record. Run 1, Event 19, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:12.701 CEST
+Begin processing the 20th record. Run 1, Event 20, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:14.484 CEST
+Begin processing the 21st record. Run 1, Event 21, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:16.075 CEST
+Begin processing the 22nd record. Run 1, Event 22, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:17.939 CEST
+Begin processing the 23rd record. Run 1, Event 23, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:19.806 CEST
+Begin processing the 24th record. Run 1, Event 24, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:21.685 CEST
+Begin processing the 25th record. Run 1, Event 25, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:23.625 CEST
+Begin processing the 26th record. Run 1, Event 26, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:25.464 CEST
+Begin processing the 27th record. Run 1, Event 27, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:27.171 CEST
+Begin processing the 28th record. Run 1, Event 28, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:29.052 CEST
+Begin processing the 29th record. Run 1, Event 29, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:30.524 CEST
+Begin processing the 30th record. Run 1, Event 30, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:32.291 CEST
+Begin processing the 31st record. Run 1, Event 31, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:34.345 CEST
+Begin processing the 32nd record. Run 1, Event 32, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:36.219 CEST
+Begin processing the 33rd record. Run 1, Event 33, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:38.085 CEST
+Begin processing the 34th record. Run 1, Event 34, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:40.077 CEST
+Begin processing the 35th record. Run 1, Event 35, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:41.729 CEST
+Begin processing the 36th record. Run 1, Event 36, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:43.352 CEST
+Begin processing the 37th record. Run 1, Event 37, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:45.150 CEST
+Begin processing the 38th record. Run 1, Event 38, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:47.032 CEST
+Begin processing the 39th record. Run 1, Event 39, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:48.991 CEST
+Begin processing the 40th record. Run 1, Event 40, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:50.855 CEST
+Begin processing the 41st record. Run 1, Event 41, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:52.703 CEST
+Begin processing the 42nd record. Run 1, Event 42, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:54.662 CEST
+Begin processing the 43rd record. Run 1, Event 43, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:56.672 CEST
+Begin processing the 44th record. Run 1, Event 44, LumiSection 1 on stream 0 at 17-Apr-2024 01:22:58.538 CEST
+Begin processing the 45th record. Run 1, Event 45, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:00.174 CEST
+Begin processing the 46th record. Run 1, Event 46, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:01.691 CEST
+Begin processing the 47th record. Run 1, Event 47, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:03.723 CEST
+Begin processing the 48th record. Run 1, Event 48, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:05.562 CEST
+Begin processing the 49th record. Run 1, Event 49, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:07.302 CEST
+Begin processing the 50th record. Run 1, Event 50, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:09.240 CEST
+Begin processing the 51st record. Run 1, Event 51, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:11.192 CEST
+Begin processing the 52nd record. Run 1, Event 52, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:13.031 CEST
+Begin processing the 53rd record. Run 1, Event 53, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:14.756 CEST
+Begin processing the 54th record. Run 1, Event 54, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:16.373 CEST
+Begin processing the 55th record. Run 1, Event 55, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:17.970 CEST
+Begin processing the 56th record. Run 1, Event 56, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:19.703 CEST
+Begin processing the 57th record. Run 1, Event 57, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:21.662 CEST
+Begin processing the 58th record. Run 1, Event 58, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:23.522 CEST
+Begin processing the 59th record. Run 1, Event 59, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:25.347 CEST
+Begin processing the 60th record. Run 1, Event 60, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:27.210 CEST
+Begin processing the 61st record. Run 1, Event 61, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:28.796 CEST
+Begin processing the 62nd record. Run 1, Event 62, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:30.703 CEST
+Begin processing the 63rd record. Run 1, Event 63, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:32.648 CEST
+Begin processing the 64th record. Run 1, Event 64, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:34.507 CEST
+Begin processing the 65th record. Run 1, Event 65, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:36.357 CEST
+Begin processing the 66th record. Run 1, Event 66, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:37.878 CEST
+Begin processing the 67th record. Run 1, Event 67, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:39.553 CEST
+Begin processing the 68th record. Run 1, Event 68, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:41.562 CEST
+Begin processing the 69th record. Run 1, Event 69, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:43.479 CEST
+Begin processing the 70th record. Run 1, Event 70, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:45.529 CEST
+Begin processing the 71st record. Run 1, Event 71, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:47.431 CEST
+Begin processing the 72nd record. Run 1, Event 72, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:49.337 CEST
+Begin processing the 73rd record. Run 1, Event 73, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:51.347 CEST
+Begin processing the 74th record. Run 1, Event 74, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:53.445 CEST
+Begin processing the 75th record. Run 1, Event 75, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:55.390 CEST
+Begin processing the 76th record. Run 1, Event 76, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:57.400 CEST
+Begin processing the 77th record. Run 1, Event 77, LumiSection 1 on stream 0 at 17-Apr-2024 01:23:59.195 CEST
+Begin processing the 78th record. Run 1, Event 78, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:01.207 CEST
+Begin processing the 79th record. Run 1, Event 79, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:02.815 CEST
+Begin processing the 80th record. Run 1, Event 80, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:04.747 CEST
+Begin processing the 81st record. Run 1, Event 81, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:06.801 CEST
+Begin processing the 82nd record. Run 1, Event 82, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:08.617 CEST
+Begin processing the 83rd record. Run 1, Event 83, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:10.556 CEST
+Begin processing the 84th record. Run 1, Event 84, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:12.482 CEST
+Begin processing the 85th record. Run 1, Event 85, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:14.283 CEST
+Begin processing the 86th record. Run 1, Event 86, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:15.949 CEST
+Begin processing the 87th record. Run 1, Event 87, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:17.593 CEST
+Begin processing the 88th record. Run 1, Event 88, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:19.915 CEST
+Begin processing the 89th record. Run 1, Event 89, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:21.894 CEST
+Begin processing the 90th record. Run 1, Event 90, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:23.761 CEST
+Begin processing the 91st record. Run 1, Event 91, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:25.496 CEST
+Begin processing the 92nd record. Run 1, Event 92, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:27.180 CEST
+Begin processing the 93rd record. Run 1, Event 93, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:28.893 CEST
+Begin processing the 94th record. Run 1, Event 94, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:31.051 CEST
+Begin processing the 95th record. Run 1, Event 95, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:32.837 CEST
+Begin processing the 96th record. Run 1, Event 96, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:34.832 CEST
+Begin processing the 97th record. Run 1, Event 97, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:36.879 CEST
+Begin processing the 98th record. Run 1, Event 98, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:38.597 CEST
+Begin processing the 99th record. Run 1, Event 99, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:40.204 CEST
+Begin processing the 100th record. Run 1, Event 100, LumiSection 1 on stream 0 at 17-Apr-2024 01:24:42.471 CEST
+17-Apr-2024 01:24:46 CEST  Closed file file:/eos/cms/store/group/dpg_hgcal/comm_hgcal/mmatthew/PatternRecognitionByKalmanFilter/CMSSW_13_2_0_pre3/samples/0_PU/zpos/n100/Eta_23/singlemuon_flatEGun_hgcalCenter//step2/step2_singlemuon_e20GeV_eta23_zpos_events100_nopu_3.root
+condor_exec.exe: line 31: cd: ../../scripts: No such file or directory

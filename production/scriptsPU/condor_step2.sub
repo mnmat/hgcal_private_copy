@@ -1,10 +1,10 @@
 executable            = create_samples.sh
 arguments             = $(eta) $(energy) $(nevents) $(idx) step2
 universe              = vanilla
-+JobFlavour = "workday"
++JobFlavour = "testmatch"
 should_transfer_files = YES
-initialdir = /afs/cern.ch/user/m/mmatthew/PatternRecognitionByKalmanFilter/CMSSW_13_2_0_pre3/src/hgcal_private_copy/production/Samples/noPU
-transfer_input_files  = run_singlestep.py, step2.py, root://eosuser.cern.ch/$(infile)
+initialdir = /afs/cern.ch/user/m/mmatthew/PatternRecognitionByKalmanFilter/CMSSW_13_2_0_pre3/src/hgcal_private_copy/production/Samples/PU
+transfer_input_files  = run_singlestep.py, step2.py, root://eoscms.cern.ch/$(infile)
 getenv                = true
 output                = condor/output/create_samples.$(eta).$(energy).out
 error                 = condor/error/create_samples.$(eta).$(energy).err

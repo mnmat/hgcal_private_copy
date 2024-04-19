@@ -7,7 +7,9 @@
 # Set input variables
 step="$1"
 cap="zpos"
-root="/eos/cms/store/group/dpg_hgcal/comm_hgcal/mmatthew/PatternRecognitionByKalmanFilter/CMSSW_13_2_0_pre3/samples/0_PU"
+root="/eos/cms/store/group/dpg_hgcal/comm_hgcal/mmatthew/PatternRecognitionByKalmanFilter/CMSSW_13_2_0_pre3/samples/200_PU"
+
+#root="/eos/user/m/mmatthew/Data/KF/CMSSW_13_2_0_pre3/samplesPU"
 particles="singlemuon"
 producer="flatEGun"
 position="hgcalCenter"
@@ -21,7 +23,7 @@ rm $f
 touch $f
 txt=""
 
-for eta in 1.6 1.7 1.9 2.1 2.3 2.5 2.7
+for eta in 1.6 1.7 2.1 2.3 2.5 2.7 2.9
 do
     for energy in 10 20 50 100
     do
